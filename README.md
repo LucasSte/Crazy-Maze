@@ -1,1 +1,1 @@
-# Jogo-de-CES-22
+# OOP class game assignment
