@@ -10,9 +10,9 @@ class Window:
         pygame.init()
         self.window = pygame.display.set_mode(self.size)
 
-    def showText(self, text, position, font_size):
+    def showText(self, text, position, font_size, color):
         title_font = pygame.font.Font(self.font_location,font_size)
-        text_surface = title_font.render(text, True, (0,0,0))
+        text_surface = title_font.render(text, True, color)
         text_rectangle = text_surface.get_rect()
         text_rectangle.center = position
         self.window.blit(text_surface, text_rectangle)
@@ -35,7 +35,7 @@ class Window:
                     game_loop = False
 
             self.window.blit(background_image, (0,0))
-            self.showText("Crazy Maze", (self.size[0]/2, self.size[1]/2), 120)
+            self.showText("Crazy Maze", (self.size[0]/2, self.size[1]/2), 120, (0,0,0))
             pygame.display.flip()
 
         pygame.quit()
