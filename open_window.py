@@ -5,6 +5,10 @@ MISSING = object()
 class Window:
 
     font_location = "fonts/conthrax-sb.ttf"
+    pressed_start_button = pygame.image.load("images/initial_button_pressed.png")
+    pressed_start_button = pygame.transform.scale(pressed_start_button, (int(720 / 2), int(231 / 2)))
+    start_button = pygame.image.load("images/initial_button.png")
+    start_button = pygame.transform.scale(start_button, (int(720 / 2), int(231 / 2)))
 
     def __init__(self, size, background):
         self.size = size
@@ -25,33 +29,14 @@ class Window:
             image = pygame.transform.scale(image, scale)
         self.window.blit(image, position)
 
-    def openWindow(self):
+    def initialWindow(self):
         pygame.display.set_caption("Crazy Maze")
         background_image = pygame.image.load(self.background)
         background_image = pygame.transform.scale(background_image, self.size)
+        self.window.blit(self.start_button, (self.size[0] / 2 - 180, 450))
         self.window.blit(background_image, (0, 0))
-        self.showImage("images/title_initial.png", (0, 40), (int(1996 / 2), int(627 / 2)))
-        self.showImage("images/maze.png", (self.size[0]/2 - 50, 150))
+        self.showImage("images/title_initial.png", (2, 40), (int(1996 / 2), int(667 / 2)))
 
-
-        game_loop = True
-        while game_loop:
-
-            mx, my = pygame.mouse.get_pos()
-
-            for event in pygame.event.get():
-
-                if (event.type == pygame.QUIT):
-                    game_loop = False
-
-            if (self.size[0]/2 - 180) <= mx <= (self.size[0]/2 + 180) and 450 <= my <= 555.5:
-                self.showImage("images/initial_button_pressed.png", (self.size[0] / 2 - 180, 450), (int(720 / 2), int(231 / 2)))
-            else:
-                self.showImage("images/initial_button.png", (self.size[0] / 2 - 180, 450), (int(720 / 2), int(231 / 2)))
-
-            pygame.display.flip()
-
-        pygame.quit()
 
 
 
