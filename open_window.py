@@ -1,6 +1,14 @@
 import pygame
+from enum import Enum
+
+
+class Action(Enum):
+    quit_game = 0
+    change_screen = 1
+
 
 MISSING = object()
+
 
 class Window:
 
@@ -36,7 +44,47 @@ class Window:
         self.window.blit(self.start_button, (self.size[0] / 2 - 180, 450))
         self.window.blit(background_image, (0, 0))
         self.showImage("images/title_initial.png", (2, 40), (int(1996 / 2), int(667 / 2)))
+        action = -1
+        while action == -1:
 
+            mx, my = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+                    action = Action.quit_game
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if (self.size[0] / 2 - 180) <= mx <= (self.size[0] / 2 + 180) and 450 <= my <= 555.5:
+                        action = Action.change_screen
+
+            if (self.size[0] / 2 - 180) <= mx <= (self.size[0] / 2 + 180) and 450 <= my <= 555.5:
+                self.window.blit(self.pressed_start_button, (self.size[0] / 2 - 180, 450))
+
+            else:
+                self.window.blit(self.start_button, (self.size[0] / 2 - 180, 450))
+
+            pygame.display.flip()
+
+        return action
+
+    def quitGame(self):
+        pygame.quit()
+
+    def showMazeScreen(self):
+        color = (255,0,0)
+        self.window.fill(color)
+        action = -1
+
+        while action == -1:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    action = Action.quit_game
+
+                pygame.display.flip()
+
+        if action == Action.quit_game:
+            self.quitGame()
 
 
 
