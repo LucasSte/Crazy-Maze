@@ -3,6 +3,7 @@ from enum import Enum
 
 
 class Action(Enum):
+    stand_by = -1
     quit_game = 0
     change_screen = 1
 
@@ -44,8 +45,8 @@ class Window:
         self.window.blit(self.start_button, (self.size[0] / 2 - 180, 450))
         self.window.blit(background_image, (0, 0))
         self.showImage("images/title_initial.png", (2, 40), (int(1996 / 2), int(667 / 2)))
-        action = -1
-        while action == -1:
+        action = Action.stand_by
+        while action == Action.stand_by:
 
             mx, my = pygame.mouse.get_pos()
 

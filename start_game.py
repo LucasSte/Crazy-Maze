@@ -16,9 +16,9 @@ elif action == Action.change_screen:
     player_list = pygame.sprite.Group()
     player_list.add(player)
 
-    action = -1
+    action = Action.stand_by
 
-    while action == -1:
+    while action == Action.stand_by:
         game_window.showMazeScreen(player_list)
 
         for event in pygame.event.get():
