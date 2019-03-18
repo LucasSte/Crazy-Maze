@@ -1,6 +1,6 @@
-#import all libraries here
+# import all libraries here
 
-#import all files here
+# import all files here
 from open_window import *
 from character import *
 
@@ -12,11 +12,9 @@ action = game_window.initialWindow()
 if action == Action.quit_game:
     game_window.quitGame()
 elif action == Action.change_screen:
-    #game_window.showImage('images/maze.png', (game_window.size[0] / 2, game_window.size[1] / 2))
     player = Character(game_window.size[0]/2, game_window.size[1]/2)
     player_list = pygame.sprite.Group()
     player_list.add(player)
-
 
     action = -1
 
