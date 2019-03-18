@@ -7,11 +7,11 @@ class Character(pygame.sprite.Sprite, Window):
     def __init__(self, start_position_x, start_position_y):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
-        self.restrictions = Window.size ##Mudar aqui quando tiver imagem definida
         image_aux = pygame.image.load('images/maze.png')
         self.images.append(image_aux)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
+        self.restrictions = (Window.size[0] - 90, Window.size[1] - 90)
         self.rect.x = start_position_x
         self.rect.y = start_position_y
 

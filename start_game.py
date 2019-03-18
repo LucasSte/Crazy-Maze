@@ -27,13 +27,13 @@ elif action == Action.change_screen:
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[ord('a')]:
-            player.control(0, -0.5)
+            player.control(0, -1)
         if keys[pygame.K_RIGHT] or keys[ord('d')]:
-            player.control(0, 0.5)
+            player.control(0, 1)
         if keys[pygame.K_UP] or keys[ord('w')]:
-            player.control(-0.5, 0)
+            player.control(-1, 0)
         if keys[pygame.K_DOWN] or keys[ord('s')]:
-            player.control(0.5, 0)
+            player.control(1, 0)
 
     if action == Action.quit_game:
         game_window.quitGame()
