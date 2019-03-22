@@ -13,24 +13,19 @@ class Maze:
     def __init__(self, num_cells_x, num_cells_y, startCell=[0, 0]):
         self.num_cells_x = num_cells_x
         self.num_cells_y = num_cells_y
+        self.dynamize(startCell)
+
+    def dynamize(self, startCell = [0,0] ):
         self.startCell = startCell
-        self.maze = self.makeMaze()
-
-    def dynamize(self, x, y):
-        # [x, y] deverah ser a posição do jogador
-        self.startCell = [x, y]
-        self.maze = self.makeMaze()
-
-    def makeMaze(self):
 
         width = self.num_cells_x * 2 + 1
         height = self.num_cells_y * 2 + 1
 
         visited = np.zeros([self.num_cells_y, self.num_cells_x], dtype=bool)
-        Maze = np.array([[1] * width, [1, 0] * self.num_cells_x + [1]] * self.num_cells_y + [[1] * width])
+        self.matrix = np.array([[1] * width, [1, 0] * self.num_cells_x + [1]] * self.num_cells_y + [[1] * width])
 
         # Mark the cell as visited and add to set
-        visited[self.startCell[1], self.startCell[0] ] = 1
+        visited[self.startCell[1], self.startCell[0]] = 1
         path = [self.startCell]
 
         # While the set of cells is not empty
@@ -63,6 +58,4 @@ class Maze:
                 visited[cY, cX] = 1
                 path.append([cX, cY])
                 # Removes the wall between them
-                Maze[(cY + cell_y + 1), (cX + cell_x + 1)] = 0
-
-        return Maze;
+                self.matrix[(cY + cell_y + 1), (cX + cell_x + 1)] = 0

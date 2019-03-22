@@ -3,6 +3,7 @@
 # import all files here
 from open_window import *
 from character import *
+from make_maze import *
 
 
 game_window = Window('images/initial_background.jpg')
@@ -16,10 +17,12 @@ elif action == Action.change_screen:
     player_list = pygame.sprite.Group()
     player_list.add(player)
 
+    game_maze = Maze(10, 10)
+
     action = Action.stand_by
 
     while action == Action.stand_by:
-        game_window.showMazeScreen(player_list)
+        game_window.showMazeScreen(player_list, game_maze)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

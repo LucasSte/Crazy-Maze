@@ -14,7 +14,9 @@ MISSING = object()
 class Window:
 
     font_location = "fonts/conthrax-sb.ttf"
-    size = (1000, 667)
+    # size = (1000, 667)
+    size = (840, 630)
+
     window = pygame.display.set_mode(size)
     pressed_start_button = pygame.image.load("images/initial_button_pressed.png")
     pressed_start_button = pygame.transform.scale(pressed_start_button, (int(720 / 2), int(231 / 2)))
@@ -71,9 +73,23 @@ class Window:
     def quitGame(self):
         pygame.quit()
 
-    def showMazeScreen(self, player_list):
-        color = (255,0,0)
+    def showMazeScreen(self, player_list, maze):
+        color = (255,255,255)
         self.window.fill(color)
+
+        maze_width = maze.num_cells_x * 2 + 1
+        maze_height = maze.num_cells_y * 2 + 1
+
+        pxl_x = self.size[0]/maze_width
+        pxl_y = self.size[1]/maze_height
+
+
+        # Draw the maze
+        for y in range(maze_height):
+            for x in range(maze_width):
+                if( maze.matrix[y][x] == 1):
+                    pygame.draw.rect(self.window, (0,0,0), [x*pxl_x, y*pxl_y, pxl_x, pxl_y])
+
         player_list.draw(self.window)
         pygame.display.flip()
 
