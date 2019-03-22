@@ -16,8 +16,8 @@ elif action == Action.change_screen:
     player = Character(game_window.size[0]/2, game_window.size[1]/2)
     player_list = pygame.sprite.Group()
     player_list.add(player)
-
-    game_maze = Maze(10, 10)
+    game_maze = Maze(25, 15)
+    game_maze = Maze(25, 15)
 
     action = Action.stand_by
 

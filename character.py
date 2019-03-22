@@ -35,7 +35,7 @@ class Character(pygame.sprite.Sprite, Window):
             self.rect.y += y
             if y > 0:
                 self.frame += 1
-                self.frame = self.frame % 2
+                self.frame = self.frame % 3
                 self.image = self.images[self.frame]
             elif y < 0:
                 self.frame -= 1

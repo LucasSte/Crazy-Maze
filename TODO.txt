@@ -2,8 +2,15 @@ Ambos:
     - Definir se o labirinto terá tamanho escolhido pelo usuário ou tamanho único
 
 Steuernagel:
-    - Colocar dimessões da tela do jogo como multiplo das dimensões do labirinto
-        - Considerando que por hora o labirinto tem tamanho único, sugiro dimenssões multiplas de [21, 21]
-        (pois um labirinto quadrado de 10 células terá dimensões medindo 10*2 + 1 = 21 )
-    - Ajustar velocidade dos pés do personagem
     - Ajustar tamanho do personagem
+    - Ajustar direção do caminhar
+        (não andar de costas)
+    - Ajustar colisão (mover personagem apenas nas posições (x, y) em que maze.matrix[y][x] = 0 )
+        (Basta dividir a dimensão da tela por maze.width e maze.height)
+    
+    Sugestões:
+        - Colocar correr com Shift
+
+Ocimar:
+    - Colocar textures-images do labirinto
+    - Ocimar já sabe o que fazer

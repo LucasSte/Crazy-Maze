@@ -10,23 +10,20 @@ from numpy.random import randint as rand
 
 class Maze:
 
-    def __init__(self, num_cells_x, num_cells_y, startCell=[0, 0]):
+    def __init__(self, num_cells_x, num_cells_y, start_cell=(0, 0)):
         self.num_cells_x = num_cells_x
         self.num_cells_y = num_cells_y
-        self.dynamize(startCell)
+        self.start_cell = start_cell
 
-    def dynamize(self, startCell = [0,0] ):
-        self.startCell = startCell
-
-        width = self.num_cells_x * 2 + 1
-        height = self.num_cells_y * 2 + 1
+        self.width = self.num_cells_x * 2 + 1
+        self.height = self.num_cells_y * 2 + 1
 
         visited = np.zeros([self.num_cells_y, self.num_cells_x], dtype=bool)
-        self.matrix = np.array([[1] * width, [1, 0] * self.num_cells_x + [1]] * self.num_cells_y + [[1] * width])
+        self.matrix = np.array([[1] * self.width, [1, 0] * self.num_cells_x + [1]] * self.num_cells_y + [[1] * self.width])
 
         # Mark the cell as visited and add to set
-        visited[self.startCell[1], self.startCell[0]] = 1
-        path = [self.startCell]
+        visited[self.start_cell[1], self.start_cell[0]] = 1
+        path = [[self.start_cell[0], self.start_cell[1]]]
 
         # While the set of cells is not empty
         while len(path):
