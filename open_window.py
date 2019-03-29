@@ -21,6 +21,11 @@ class Window:
     pressed_start_button = pygame.transform.scale(pressed_start_button, (int(720 / 2), int(231 / 2)))
     start_button = pygame.image.load("images/initial_button.png")
     start_button = pygame.transform.scale(start_button, (int(720 / 2), int(231 / 2)))
+    grass_image = pygame.image.load("images/grass2.jpg")
+    grass_image = pygame.transform.scale(grass_image, size)
+
+
+
 
     def __init__(self, background, maze):
         self.background = background
@@ -32,11 +37,9 @@ class Window:
         self.pxl_x = self.size[0] / maze.width
         self.pxl_y = self.size[1] / maze.height
 
-        self.grass_image = pygame.image.load("images/grass2.jpg")
-        self.grass_image = pygame.transform.scale(self.grass_image, self.size)
-
         self.wall_image = pygame.image.load("images/wall.png")
         self.wall_image = pygame.transform.scale(self.wall_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
+
 
     def showText(self, text, position, font_size, color):
         title_font = pygame.font.Font(self.font_location, font_size)
@@ -87,14 +90,12 @@ class Window:
 
 
     def showMazeScreen(self, player_list, maze):
-        color = (255,255,255)
-        # self.window.fill(color)
         self.window.blit(self.grass_image, (0, 0))
 
         # Draw the maze
         for y in range(maze.height):
             for x in range(maze.width):
-                if( maze.matrix[y][x] == 1):
+                if maze.matrix[y][x] == 1:
                     self.window.blit(self.wall_image, (x*self.pxl_x, y*self.pxl_y))
 
         player_list.draw(self.window)

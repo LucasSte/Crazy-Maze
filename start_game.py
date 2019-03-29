@@ -14,7 +14,7 @@ action = game_window.initialWindow()
 if action == Action.quit_game:
     game_window.quitGame()
 elif action == Action.change_screen:
-    player = Character(game_window.size[0]/2, game_window.size[1]/2)
+    player = Character(35, 35)
     player_list = pygame.sprite.Group()
     player_list.add(player)
 
@@ -30,13 +30,13 @@ elif action == Action.change_screen:
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[ord('a')]:
-            player.control(0, -1)
+            player.control(0, -2, game_maze, game_window)
         if keys[pygame.K_RIGHT] or keys[ord('d')]:
-            player.control(0, 1)
+            player.control(0, 2, game_maze, game_window)
         if keys[pygame.K_UP] or keys[ord('w')]:
-            player.control(-1, 0)
+            player.control(-2, 0, game_maze, game_window)
         if keys[pygame.K_DOWN] or keys[ord('s')]:
-            player.control(1, 0)
+            player.control(2, 0, game_maze, game_window)
 
     if action == Action.quit_game:
         game_window.quitGame()
