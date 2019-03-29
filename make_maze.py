@@ -19,7 +19,7 @@ class Maze:
         self.height = self.num_cells_y * 2 + 1
 
         visited = np.zeros([self.num_cells_y, self.num_cells_x], dtype=bool)
-        self.matrix = np.array([[1] * self.width, [1, 0] * self.num_cells_x + [1]] * self.num_cells_y + [[1] * self.width])
+        self.matrix = np.array([[1] * self.width, [1, 0] * self.num_cells_x + [1]] * self.num_cells_y + [[1] * self.width], dtype=int)
 
         # Mark the cell as visited and add to set
         visited[self.start_cell[1], self.start_cell[0]] = 1
