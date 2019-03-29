@@ -5,8 +5,9 @@ from open_window import *
 from character import *
 from make_maze import *
 
+game_maze = Maze(15, 10)
 
-game_window = Window('images/initial_background.jpg')
+game_window = Window('images/initial_background.jpg', game_maze)
 
 action = game_window.initialWindow()
 
@@ -16,8 +17,7 @@ elif action == Action.change_screen:
     player = Character(game_window.size[0]/2, game_window.size[1]/2)
     player_list = pygame.sprite.Group()
     player_list.add(player)
-    game_maze = Maze(25, 15)
-    game_maze = Maze(25, 15)
+
 
     action = Action.stand_by
 

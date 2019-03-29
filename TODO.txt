@@ -12,5 +12,4 @@ Steuernagel:
         - Colocar correr com Shift
 
 Ocimar:
-    - Colocar textures-images do labirinto
-    - Ocimar já sabe o que fazer
+    - 

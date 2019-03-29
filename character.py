@@ -10,6 +10,7 @@ class Character(pygame.sprite.Sprite, Window):
         self.frame = 0
         for i in range(1, 4):
             image_aux = pygame.image.load('images/Walk(' + str(i) + ').png')
+            image_aux = pygame.transform.scale(image_aux, (50, 50))
             self.images.append(image_aux)
             self.image = self.images[0]
             self.rect = self.image.get_rect()

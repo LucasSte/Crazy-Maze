@@ -22,12 +22,24 @@ class Window:
     start_button = pygame.image.load("images/initial_button.png")
     start_button = pygame.transform.scale(start_button, (int(720 / 2), int(231 / 2)))
 
-    def __init__(self, background):
+    def __init__(self, background, maze):
         self.background = background
         pygame.init()
 
+        # showMazeScreen variables:
+        ## Coloquei elas aqui, pois as imagens precisam ser carregadas apenas uma vez, caso contrario, o jogo fica
+        ## muito lento
+        self.pxl_x = self.size[0] / maze.width
+        self.pxl_y = self.size[1] / maze.height
+
+        self.grass_image = pygame.image.load("images/grass2.jpg")
+        self.grass_image = pygame.transform.scale(self.grass_image, self.size)
+
+        self.wall_image = pygame.image.load("images/wall.png")
+        self.wall_image = pygame.transform.scale(self.wall_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
+
     def showText(self, text, position, font_size, color):
-        title_font = pygame.font.Font(self.font_location,font_size)
+        title_font = pygame.font.Font(self.font_location, font_size)
         text_surface = title_font.render(text, True, color)
         text_rectangle = text_surface.get_rect()
         text_rectangle.center = position
@@ -72,22 +84,18 @@ class Window:
     def quitGame(self):
         pygame.quit()
 
+
+
     def showMazeScreen(self, player_list, maze):
         color = (255,255,255)
-        self.window.fill(color)
-
-        maze_width = maze.num_cells_x * 2 + 1
-        maze_height = maze.num_cells_y * 2 + 1
-
-        pxl_x = self.size[0]/maze_width
-        pxl_y = self.size[1]/maze_height
-
+        # self.window.fill(color)
+        self.window.blit(self.grass_image, (0, 0))
 
         # Draw the maze
-        for y in range(maze_height):
-            for x in range(maze_width):
+        for y in range(maze.height):
+            for x in range(maze.width):
                 if( maze.matrix[y][x] == 1):
-                    pygame.draw.rect(self.window, (0,0,0), [x*pxl_x, y*pxl_y, pxl_x+1, pxl_y+1])
+                    self.window.blit(self.wall_image, (x*self.pxl_x, y*self.pxl_y))
 
         player_list.draw(self.window)
         pygame.display.flip()
