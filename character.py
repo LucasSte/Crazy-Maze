@@ -27,7 +27,7 @@ class Character(pygame.sprite.Sprite, Window):
         if maze.matrix[desired_matrix_y][desired_matrix_x] == 0:
 
             if maze.matrix[desired_matrix_y][desired_matrix_x + 1] == 1 and x > 0:
-                if x + self.rect.x < desired_matrix_x*window.pxl_y + 15:
+                if x + self.rect.x < desired_matrix_x*window.pxl_y + 17:
                     self.rect.x += x
                     if x > 0:
                         self.frame += 1
