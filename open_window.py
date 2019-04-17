@@ -6,6 +6,7 @@ class Action(Enum):
     stand_by = -1
     quit_game = 0
     change_screen = 1
+    player_dead = 2
 
 
 MISSING = object()
@@ -23,8 +24,8 @@ class Window:
     start_button = pygame.transform.scale(start_button, (int(720 / 2), int(231 / 2)))
     grass_image = pygame.image.load("images/grass2.jpg")
     grass_image = pygame.transform.scale(grass_image, size)
-
-
+    heart_image = pygame.image.load("images/heart.png")
+    heart_image = pygame.transform.scale(heart_image, (24,24))
 
 
     def __init__(self, background, maze):
@@ -88,8 +89,7 @@ class Window:
         pygame.quit()
 
 
-
-    def showMazeScreen(self, player_list, maze):
+    def showMazeScreen(self, player_list, maze, lives):
         self.window.blit(self.grass_image, (0, 0))
 
         # Draw the maze
@@ -99,8 +99,24 @@ class Window:
                     self.window.blit(self.wall_image, (x*self.pxl_x, y*self.pxl_y))
 
         player_list.draw(self.window)
+        self.showText("Vidas", (50, 15), 23, (0, 0, 0))
+        for i in range(0, lives):
+            self.window.blit(self.heart_image, (110 + 26*i, 3))
         pygame.display.flip()
 
+    def showEndScreen(self):
+        color = (0, 230, 0)
+        self.window.fill(color)
+
+        action = Action.stand_by
+
+        while action == Action.stand_by:
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+                    action = Action.quit_game
+
+            pygame.display.flip()
 
 
 
