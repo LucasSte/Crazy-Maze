@@ -7,9 +7,13 @@ Steuernagel:
         (não andar de costas)
     - Ajustar colisão (mover personagem apenas nas posições (x, y) em que maze.matrix[y][x] = 0 )
         (Basta dividir a dimensão da tela por maze.width e maze.height)
+    - Identificar quando o personagem atinge o fim do labirinto
     
     Sugestões:
         - Colocar correr com Shift
 
 Ocimar:
-    - 
+    - Adicionar graficamente a entrada e saída do labirinto
+    - Fazer telas de GAME OVER e YOU WIN!
+    - Adicionar trilha sonora
+    - Adicionar .gitignore

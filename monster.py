@@ -55,7 +55,7 @@ class Monster(Window, pygame.sprite.Sprite):
 
         monster_node = (monster_matrix_y, monster_matrix_x)
 
-        if len(self.path_to_player) > 0:
+        if self.path_to_player is not None and len(self.path_to_player) > 0:
             next_node = self.path_to_player[-1]
 
             if monster_node[0] - next_node[0] > 0:

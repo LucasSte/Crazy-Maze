@@ -76,5 +76,15 @@ class Character(pygame.sprite.Sprite, Window):
                         self.frame = 2
                     self.image = self.images[self.frame]
 
+    def getNode(self, maze):
+        matrix_shape = maze.matrix.shape
+
+        player_matrix_x = int(self.rect.x * matrix_shape[1] / Window.size[0])
+        player_matrix_y = int(self.rect.y * matrix_shape[0] / Window.size[1])
+
+        player_node = (player_matrix_x, player_matrix_y)
+
+        return player_node
+
 
 

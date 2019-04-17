@@ -3,7 +3,7 @@
 # import all files here
 from open_window import *
 from character import *
-from make_maze import *
+from maze import *
 from monster import *
 
 game_maze = Maze(15, 10)
@@ -34,9 +34,7 @@ elif action == Action.change_screen:
             if event.type == pygame.QUIT:
                 action = Action.quit_game
 
-            '''if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:
-                    red_monster.updatePosition(game_maze, game_window)'''
+        game_maze.updateMaze(player)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[ord('a')]:
@@ -58,10 +56,8 @@ elif action == Action.change_screen:
             player.control(2, 0, game_maze, game_window)
             red_monster.findNewPosition(player, game_maze)
             red_monster.updatePosition(game_maze, game_window)
-
-
-        red_monster.updatePosition(game_maze, game_window)
-
+        else:
+            red_monster.updatePosition(game_maze, game_window)
 
     if action == Action.quit_game:
         game_window.quitGame()
