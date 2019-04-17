@@ -1,6 +1,6 @@
 import pygame
 from open_window import Window
-from a_star import aStar
+from algorithm import Algorithm
 
 
 class Monster(Window, pygame.sprite.Sprite):
@@ -35,9 +35,8 @@ class Monster(Window, pygame.sprite.Sprite):
 
         monster_node = (monster_matrix_y, monster_matrix_x)
 
-
         if self.last_monster_node_x != monster_node[0] or self.last_monster_node_y != monster_node[1]:
-            self.path_to_player = aStar(maze.matrix, monster_node, player_node)
+            self.path_to_player = Algorithm.aStar(maze.matrix, monster_node, player_node)
 
     def getNextPosition(self, window):
 
