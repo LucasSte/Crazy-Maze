@@ -1,6 +1,7 @@
 import pygame
 from open_window import Window
-from a_star import aStar
+from algorithm import Algorithm
+import numpy as np
 
 
 class Monster(Window, pygame.sprite.Sprite):
@@ -9,7 +10,7 @@ class Monster(Window, pygame.sprite.Sprite):
     last_monster_node_x = -1
     last_monster_node_y = -1
 
-    def __init__(self, image_path, start_position_x, start_position_y):
+    def __init__(self, image_path, start_position_x, start_position_y, speed):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         self.frame = 0
@@ -17,27 +18,35 @@ class Monster(Window, pygame.sprite.Sprite):
         image_aux = pygame.transform.scale(image_aux, (32, 32))
         self.image = image_aux
         self.rect = self.image.get_rect()
+        self.start_position = (start_position_x, start_position_y)
         self.rect.x = start_position_x
         self.rect.y = start_position_y
         self.next_position = (start_position_x, start_position_y)
+        self.speed = speed
 
-    def findNewPosition(self, player, maze):
+    def resetPosition(self):
+        self.rect.x = self.start_position[0]
+        self.rect.y = self.start_position[1]
+
+    def getMonsterNode(self, maze):
 
         matrix_shape = maze.matrix.shape
-
-        player_matrix_x = int(player.rect.x*matrix_shape[1]/Window.size[0])
-        player_matrix_y = int(player.rect.y*matrix_shape[0]/Window.size[1])
-
-        player_node = (player_matrix_y, player_matrix_x)
 
         monster_matrix_x = int(self.rect.x*matrix_shape[1]/Window.size[0])
         monster_matrix_y = int(self.rect.y*matrix_shape[0]/Window.size[1])
 
         monster_node = (monster_matrix_y, monster_matrix_x)
 
+        return monster_node
+
+    def findNewPosition(self, player, maze):
+
+        player_node = player.getCharacterNode(maze)
+
+        monster_node = self.getMonsterNode(maze)
 
         if self.last_monster_node_x != monster_node[0] or self.last_monster_node_y != monster_node[1]:
-            self.path_to_player = aStar(maze.matrix, monster_node, player_node)
+            self.path_to_player = Algorithm.aStar(maze.matrix, monster_node, player_node)
 
     def getNextPosition(self, window):
 
@@ -48,24 +57,21 @@ class Monster(Window, pygame.sprite.Sprite):
 
     def updatePosition(self, maze, window):
 
-        matrix_shape = maze.matrix.shape
 
-        monster_matrix_x = int(self.rect.x*matrix_shape[1]/Window.size[0])
-        monster_matrix_y = int(self.rect.y*matrix_shape[0]/Window.size[1])
-
-        monster_node = (monster_matrix_y, monster_matrix_x)
+        monster_node = self.getMonsterNode(maze)
 
         if self.path_to_player is not None and len(self.path_to_player) > 0:
             next_node = self.path_to_player[-1]
 
             if monster_node[0] - next_node[0] > 0:
-                self.rect.y -= 1
+                self.rect.y -= self.speed
             elif monster_node[0] - next_node[0] < 0:
-                self.rect.y += 1
+                self.rect.y += self.speed
             elif monster_node[1] - next_node[1] > 0:
-                self.rect.x -= 1
+                self.rect.x -= self.speed
             elif monster_node[1] - next_node[1] < 0:
-                self.rect.x += 1
+                self.rect.x += self.speed
             else:
                 self.getNextPosition(window)
+
 
