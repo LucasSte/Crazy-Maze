@@ -26,6 +26,8 @@ class Window:
     grass_image = pygame.transform.scale(grass_image, size)
     heart_image = pygame.image.load("images/heart.png")
     heart_image = pygame.transform.scale(heart_image, (24,24))
+    game_over_image = pygame.image.load("images/game_over.png")
+    game_over_image = pygame.transform.scale(game_over_image, size)
 
 
     def __init__(self, background, maze):
@@ -40,6 +42,8 @@ class Window:
 
         self.wall_image = pygame.image.load("images/wall.png")
         self.wall_image = pygame.transform.scale(self.wall_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
+        self.exit_image = pygame.image.load("images/exit.png")
+        self.exit_image = pygame.transform.scale(self.exit_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
 
 
     def showText(self, text, position, font_size, color):
@@ -98,15 +102,18 @@ class Window:
                 if maze.matrix[y][x] == 1:
                     self.window.blit(self.wall_image, (x*self.pxl_x, y*self.pxl_y))
 
+        # Draw exit sign
+        self.window.blit(self.exit_image, ( (maze.width -2) * self.pxl_x, (maze.height - 2)* self.pxl_y))
+
+        # Draw player lives
         player_list.draw(self.window)
-        self.showText("Vidas", (50, 15), 23, (0, 0, 0))
+        self.showText("Vidas", (50, 15), 23, (255, 255, 255))
         for i in range(0, lives):
             self.window.blit(self.heart_image, (110 + 26*i, 3))
         pygame.display.flip()
 
     def showEndScreen(self):
-        color = (0, 230, 0)
-        self.window.fill(color)
+        self.window.blit(self.game_over_image, (0, 0))
 
         action = Action.stand_by
 

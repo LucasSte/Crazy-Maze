@@ -14,6 +14,5 @@ Steuernagel:
 
 Ocimar:
     - Adicionar graficamente a entrada e saída do labirinto
-    - Fazer telas de GAME OVER e YOU WIN!
+    - Fazer tela de YOU WIN!
     - Adicionar trilha sonora
-    - Adicionar .gitignore

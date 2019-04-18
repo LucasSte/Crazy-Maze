@@ -27,7 +27,7 @@ class Maze:
 
         self.update_counter = 0
         self.update_delay = 0
-        self.max_delay = 5
+        self.max_delay = 30
         self.mazes_matrices = []
 
         visited = np.zeros([self.num_cells_y, self.num_cells_x], dtype=bool)
