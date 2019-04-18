@@ -13,6 +13,5 @@ Steuernagel:
         - Colocar correr com Shift
 
 Ocimar:
-    - Adicionar graficamente a entrada e saída do labirinto
     - Fazer tela de YOU WIN!
     - Adicionar trilha sonora

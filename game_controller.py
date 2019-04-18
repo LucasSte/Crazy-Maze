@@ -1,5 +1,5 @@
 from character import *
-from make_maze import *
+from maze import *
 from monster import *
 from parallel_threads import ParallelThreads
 import time
@@ -127,26 +127,26 @@ class GameController:
                 if event.type == pygame.QUIT:
                     action = Action.quit_game
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if (self.game_window.size[0] / 2 - 180) <= mx <= (self.game_window.size[0] / 2 + 180) and \
-                            330 <= my <= 435.5:
+                    if (self.game_window.size[0] / 4 - 180) <= mx <= (self.game_window.size[0] / 4 + 180) and \
+                            500 <= my <= 605.5:
                         action = Action.stand_by
-                    elif (self.game_window.size[0] / 2 - 180) <= mx <= (self.game_window.size[0] / 2 + 180) and \
+                    elif (3*self.game_window.size[0] / 4 - 180) <= mx <= (3*self.game_window.size[0] / 4 + 180) and \
                             500 <= my <= 605.5:
                         action = Action.quit_game
 
-            if (self.game_window.size[0] / 2 - 180) <= mx <= (self.game_window.size[0] / 2 + 180) and \
-                    330 <= my <= 435.5:
-                self.game_window.window.blit(self.game_window.pressed_restart_button, ((self.game_window.size[0] / 2 - 180), 330))
-
-            else:
-                self.game_window.window.blit(self.game_window.restart_button, ((self.game_window.size[0] / 2 - 180), 330))
-
-            if (self.game_window.size[0] / 2 - 180) <= mx <= (self.game_window.size[0] / 2 + 180) and \
+            if (self.game_window.size[0] / 4 - 180) <= mx <= (self.game_window.size[0] / 4 + 180) and \
                     500 <= my <= 605.5:
-                self.game_window.window.blit(self.game_window.pressed_exit_button, ((self.game_window.size[0] / 2 - 180), 500))
+                self.game_window.window.blit(self.game_window.pressed_restart_button, ((self.game_window.size[0] / 4 - 180), 500))
 
             else:
-                self.game_window.window.blit(self.game_window.exit_button, ((self.game_window.size[0] / 2 - 180), 500))
+                self.game_window.window.blit(self.game_window.restart_button, ((self.game_window.size[0] / 4 - 180), 500))
+
+            if (3*self.game_window.size[0] / 4 - 180) <= mx <= (3*self.game_window.size[0] / 4 + 180) and \
+                    500 <= my <= 605.5:
+                self.game_window.window.blit(self.game_window.pressed_exit_button, ((3*self.game_window.size[0] / 4 - 180), 500))
+
+            else:
+                self.game_window.window.blit(self.game_window.exit_button, ((3*self.game_window.size[0] / 4 - 180), 500))
 
             pygame.display.flip()
 

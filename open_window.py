@@ -98,28 +98,27 @@ class Window:
             self.window.blit(self.heart_image, (110 + 26*i, 3))
         pygame.display.flip()
 
-    def showEndScreen(self):
+    def showEndScreen(self, time):
         self.window.blit(self.game_over_image, (0, 0))
-        self.window.blit(self.background_image, (0, 0))
-        self.showImage("images/text_box.png", (110, 40), (758, 234))
-        self.showText("Você morreu!", (470, 90), 50, (23, 39, 36))
-        self.showText("Você durou apenas", (470, 140), 25, (23, 39, 36))
+        # self.showImage("images/text_box.png", (110, 40), (758, 234))
+        # self.showText("Você morreu!", (470, 90), 50, (23, 39, 36))
+        # self.showText("Você durou apenas", (470, 140), 25, (255, 255, 255))
 
         action = Action.stand_by
         if time <= 60:
             time = int(time*100)
             time = time/100.0
-            self.showText(str(time) + " segundos no jogo!", (470, 170), 25, (23, 39, 36))
+            self.showText("Em apenas " + str(time) + " segundos no jogo!", (self.size[0] / 2, 400), 25, (255, 255, 255))
         else:
             time = time/60
             time = int(time*100)
             time = time/100.0
-            self.showText(str(time) + " minutos no jogo!", (470, 170), 25, (23, 39, 36))
+            self.showText("Em apenas " + str(time) + " minutos no jogo!", (self.size[0] / 2, 400), 25, (255, 255, 255))
 
-        self.showText("Tente sair do labirinto", (470, 210), 40, (23, 39, 36))
-        self.showText("sã e salvo!", (470, 250), 40, (23, 39, 36))
-        self.window.blit(self.restart_button, (self.size[0] / 2 - 180, 330))
-        self.window.blit(self.exit_button, (self.size[0] / 2 - 180, 500))
+        # self.showText("Tente sair do labirinto", (470, 210), 40, (23, 39, 36))
+        # self.showText("sã e salvo!", (470, 250), 40, (23, 39, 36))
+        self.window.blit(self.restart_button, (self.size[0] / 4 - 180, 500))
+        self.window.blit(self.exit_button, (3*self.size[0] / 4 - 180, 500))
 
 
 
