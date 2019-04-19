@@ -8,6 +8,7 @@ class Action(Enum):
     change_screen = 1
     player_dead = 2
     local_loop = 3
+    player_win = 4
 
 
 MISSING = object()
@@ -37,6 +38,8 @@ class Window:
     pressed_restart_button = pygame.transform.scale(pressed_restart_button, (360, 115))
     game_over_image = pygame.image.load("images/game_over.png")
     game_over_image = pygame.transform.scale(game_over_image, size)
+    you_escaped_image = pygame.image.load("images/you_escaped.png")
+    you_escaped_image = pygame.transform.scale(you_escaped_image, size)
 
 
 
@@ -121,5 +124,17 @@ class Window:
         self.window.blit(self.exit_button, (3*self.size[0] / 4 - 180, 500))
 
 
+    def showWinScreen(self, time):
+        self.window.blit(self.you_escaped_image, (0, 0))
+        self.showImage("images/text_box.png", (100, 40), (758, 200))
+        self.showText("Você Escapou!!", (480, 100), 60, (23, 39, 36))
 
-
+        if time <= 60:
+            time = int(time * 100)
+            time = time / 100.0
+            self.showText("Em um total de " + str(time) + " segundos no jogo!", (self.size[0] / 2, self.size[1]/4), 25, (255, 255, 255))
+        else:
+            time = time / 60
+            time = int(time * 100)
+            time = time / 100.0
+            self.showText("Em um total de " + str(time) + " minutos no jogo!", (self.size[0] / 0, self.size[1]/4), 25, (255, 255, 255))

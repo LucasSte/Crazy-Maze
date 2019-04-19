@@ -1,12 +1,6 @@
-Ambos:
-    - Definir se o labirinto terá tamanho escolhido pelo usuário ou tamanho único
-
 Steuernagel:
-    - Ajustar tamanho do personagem
     - Ajustar direção do caminhar
         (não andar de costas)
-    - Ajustar colisão (mover personagem apenas nas posições (x, y) em que maze.matrix[y][x] = 0 )
-        (Basta dividir a dimensão da tela por maze.width e maze.height)
     - Identificar quando o personagem atinge o fim do labirinto
     
     Sugestões:
@@ -15,3 +9,4 @@ Steuernagel:
 Ocimar:
     - Fazer tela de YOU WIN!
     - Adicionar trilha sonora
+    - corrigir node vs Cell 

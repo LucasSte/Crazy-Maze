@@ -133,15 +133,11 @@ class Character(pygame.sprite.Sprite, Window):
         else:
             return Action.stand_by
 
+    def detectWin(self, maze, action_local):
+        postition = self.getCharacterNode(maze)
 
-    def getNode(self, maze):
-        matrix_shape = maze.matrix.shape
+        # win has preference
+        if postition[1] == maze.width -2 and postition[0] == maze.height -2:
+            return Action.player_win
 
-        player_matrix_x = int(self.rect.x * matrix_shape[1] / Window.size[0])
-        player_matrix_y = int(self.rect.y * matrix_shape[0] / Window.size[1])
-
-        player_node = (player_matrix_x, player_matrix_y)
-
-        return player_node
-
-
+        return action_local

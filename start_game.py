@@ -19,6 +19,9 @@ while action == Action.stand_by:
     if action == Action.player_dead:
         action = game.endScreen()
 
+    if action == Action.player_win:
+        action = game.winScreen()
+
     if action == Action.quit_game:
         game.quitGame()
 
