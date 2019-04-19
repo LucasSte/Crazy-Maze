@@ -20,7 +20,7 @@ while action == Action.stand_by:
         action = game.endScreen()
 
     if action == Action.player_win:
-        action = game.winScreen()
+        action = game.winningScreen()
 
     if action == Action.quit_game:
         game.quitGame()
