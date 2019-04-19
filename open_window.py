@@ -126,7 +126,7 @@ class Window:
 
     def showWinScreen(self, time):
         self.window.blit(self.you_escaped_image, (0, 0))
-        self.showImage("images/text_box.png", (100, 40), (758, 200))
+        self.showImage("images/text_box.png", (100, 50), (758, 200))
         self.showText("Você Escapou!!", (480, 100), 60, (23, 39, 36))
 
         if time <= 60:
@@ -137,4 +137,4 @@ class Window:
             time = time / 60
             time = int(time * 100)
             time = time / 100.0
-            self.showText("Em um total de " + str(time) + " minutos no jogo!", (self.size[0] / 0, self.size[1]/4), 25, (255, 255, 255))
+            self.showText("Em um total de " + str(time) + " minutos no jogo!", (self.size[0] / 2, self.size[1]/4), 25, (255, 255, 255))
