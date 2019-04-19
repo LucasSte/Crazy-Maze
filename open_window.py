@@ -107,7 +107,6 @@ class Window:
         # self.showText("Você morreu!", (470, 90), 50, (23, 39, 36))
         # self.showText("Você durou apenas", (470, 140), 25, (255, 255, 255))
 
-        action = Action.stand_by
         if time <= 60:
             time = int(time*100)
             time = time/100.0
