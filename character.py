@@ -125,8 +125,8 @@ class Character(pygame.sprite.Sprite, Window):
     def detectWin(self, maze, action_local):
         postition = self.getCharacterNode(maze)
 
-        # win has preference
-        if postition[1] == maze.width -2 and postition[0] == maze.height -2:
+        # winning has preference
+        if postition[1] == maze.width - 2 and postition[0] == maze.height - 2:
             return Action.player_win
 
         return action_local

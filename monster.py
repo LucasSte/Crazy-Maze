@@ -45,15 +45,14 @@ class Monster(Window, pygame.sprite.Sprite):
         # aStar eh muito pesado e estava causando lag no jogo, adicionei um delay para sua execucao:
         if self.aStar_counter == 0 or self.aStar_counter > self.aStar_delay:
             player_node = player.getCharacterNode(maze)
-
             monster_node = self.getMonsterNode(maze)
-
-            if self.last_monster_node_x != monster_node[0] or self.last_monster_node_y != monster_node[1]:
-                self.path_to_player = Algorithm.aStar(maze.matrix, monster_node, player_node)
-
+            if maze.matrix[player_node[0]][player_node[1]] == 0:
+                if self.last_monster_node_x != monster_node[0] or self.last_monster_node_y != monster_node[1]:
+                    self.path_to_player = Algorithm.aStar(maze.matrix, monster_node, player_node)
+                    
             self.aStar_counter = 0
 
-        self.aStar_counter = self.aStar_counter +1
+        self.aStar_counter = self.aStar_counter + 1
 
 
     def getNextPosition(self, window):

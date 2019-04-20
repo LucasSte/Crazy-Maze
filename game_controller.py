@@ -57,8 +57,8 @@ class GameController:
         player_list.add(green_monster)
         player_list.add(ugly_monster)
 
-        # red_monster.findNewPosition(player, game_maze)
-        # red_monster.getNextPosition(self.game_window)
+        red_monster.findNewPosition(player, game_maze)
+        red_monster.getNextPosition(self.game_window)
 
         action_local = Action.stand_by
 
@@ -104,11 +104,11 @@ class GameController:
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
-            # red_monster.updatePosition(game_maze, self.game_window)
-            # green_monster.updatePosition(game_maze, self.game_window)
-            # ugly_monster.updatePosition(game_maze, self.game_window)
-            action_local = player.detectMonsterCollision(red_monster, green_monster, ugly_monster,game_maze)
+            red_monster.updatePosition(game_maze, self.game_window)
+            green_monster.updatePosition(game_maze, self.game_window)
+            ugly_monster.updatePosition(game_maze, self.game_window)
 
+            action_local = player.detectMonsterCollision(red_monster, green_monster, ugly_monster,game_maze)
             action_local = player.detectWin(game_maze, action_local)
 
             for event in pygame.event.get():
@@ -161,11 +161,11 @@ class GameController:
 
         return action
 
-    def winScreen(self):
+    def winningScreen(self):
         restart_position = (self.game_window.size[0] / 4 - 235, 490)
         exit_position = ((3 * self.game_window.size[0] / 4 - 140), 490)
 
-        self.game_window.showWinScreen(self.playing_time)
+        self.game_window.showWinningScreen(self.playing_time)
 
         action = Action.local_loop
 
