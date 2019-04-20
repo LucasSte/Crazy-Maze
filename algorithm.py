@@ -134,3 +134,18 @@ class Algorithm:
                 matrix[(cY + cell_y + 1), (cX + cell_x + 1)] = 0
 
         return matrix
+
+
+class AuxFunc:
+
+    @staticmethod
+    def getNode(position_x, position_y, maze, window):
+
+        matrix_shape = maze.matrix.shape
+
+        character_matrix_x = int(position_x*matrix_shape[1]/window.size[0])
+        character_matrix_y = int(position_y*matrix_shape[0]/window.size[1])
+
+        character_node = (character_matrix_y, character_matrix_x)
+
+        return character_node

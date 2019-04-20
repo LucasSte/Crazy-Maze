@@ -44,9 +44,11 @@ class GameController:
         return action
 
     def playGame(self, maze_shape):
-        player = Character(35, 35, 3)
         game_maze = Maze(maze_shape[0], maze_shape[1])
+
+        player = Character(10, self.game_window)
         player_list = pygame.sprite.Group()
+
         red_monster = Monster('images/monster1.png', 33, 605, 2)
         green_monster = Monster('images/monster2.png', 935, 32, 2)
         ugly_monster = Monster('images/monster3.png', 935, 32, 1)
@@ -55,8 +57,8 @@ class GameController:
         player_list.add(green_monster)
         player_list.add(ugly_monster)
 
-        red_monster.findNewPosition(player, game_maze)
-        red_monster.getNextPosition(self.game_window)
+        # red_monster.findNewPosition(player, game_maze)
+        # red_monster.getNextPosition(self.game_window)
 
         action_local = Action.stand_by
 
@@ -71,40 +73,40 @@ class GameController:
             # Move characters
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT] or keys[ord('a')]:
-                player.control(0, -4, game_maze, self.game_window)
-                red_monster.updatePosition(game_maze, self.game_window)
-                green_monster.updatePosition(game_maze, self.game_window)
-                ugly_monster.updatePosition(game_maze, self.game_window)
+                player.control(0, -1, game_maze)
+                # red_monster.updatePosition(game_maze, self.game_window)
+                # green_monster.updatePosition(game_maze, self.game_window)
+                # ugly_monster.updatePosition(game_maze, self.game_window)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
             elif keys[pygame.K_RIGHT] or keys[ord('d')]:
-                player.control(0, 4, game_maze, self.game_window)
-                red_monster.updatePosition(game_maze, self.game_window)
-                green_monster.updatePosition(game_maze, self.game_window)
-                ugly_monster.updatePosition(game_maze, self.game_window)
+                player.control(0, 1, game_maze)
+                # red_monster.updatePosition(game_maze, self.game_window)
+                # green_monster.updatePosition(game_maze, self.game_window)
+                # ugly_monster.updatePosition(game_maze, self.game_window)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
             elif keys[pygame.K_UP] or keys[ord('w')]:
-                player.control(-4, 0, game_maze, self.game_window)
-                red_monster.updatePosition(game_maze, self.game_window)
-                green_monster.updatePosition(game_maze, self.game_window)
-                ugly_monster.updatePosition(game_maze, self.game_window)
+                player.control(-1, 0, game_maze)
+                # red_monster.updatePosition(game_maze, self.game_window)
+                # green_monster.updatePosition(game_maze, self.game_window)
+                # ugly_monster.updatePosition(game_maze, self.game_window)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
             elif keys[pygame.K_DOWN] or keys[ord('s')]:
-                player.control(4, 0, game_maze, self.game_window)
-                red_monster.updatePosition(game_maze, self.game_window)
-                green_monster.updatePosition(game_maze, self.game_window)
-                ugly_monster.updatePosition(game_maze, self.game_window)
+                player.control(1, 0, game_maze)
+                # red_monster.updatePosition(game_maze, self.game_window)
+                # green_monster.updatePosition(game_maze, self.game_window)
+                # ugly_monster.updatePosition(game_maze, self.game_window)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
-            red_monster.updatePosition(game_maze, self.game_window)
-            green_monster.updatePosition(game_maze, self.game_window)
-            ugly_monster.updatePosition(game_maze, self.game_window)
+            # red_monster.updatePosition(game_maze, self.game_window)
+            # green_monster.updatePosition(game_maze, self.game_window)
+            # ugly_monster.updatePosition(game_maze, self.game_window)
             action_local = player.detectMonsterCollision(red_monster, green_monster, ugly_monster,game_maze)
 
             action_local = player.detectWin(game_maze, action_local)

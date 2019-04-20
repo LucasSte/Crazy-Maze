@@ -1,7 +1,6 @@
 import pygame
 from open_window import Window
 from algorithm import Algorithm
-import numpy as np
 
 
 class Monster(Window, pygame.sprite.Sprite):

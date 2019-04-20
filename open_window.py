@@ -41,8 +41,6 @@ class Window:
     you_escaped_image = pygame.image.load("images/you_escaped.png")
     you_escaped_image = pygame.transform.scale(you_escaped_image, size)
 
-
-
     def __init__(self, background, maze_size):
         self.background = background
         pygame.init()
@@ -60,7 +58,6 @@ class Window:
 
         self.background_image = pygame.image.load(self.background)
         self.background_image = pygame.transform.scale(self.background_image, self.size)
-
 
     def showText(self, text, position, font_size, color):
         title_font = pygame.font.Font(self.font_location, font_size)
@@ -94,8 +91,10 @@ class Window:
         # Draw exit sign
         self.window.blit(self.exit_image, ( (maze.width -2) * self.pxl_x, (maze.height - 2)* self.pxl_y))
 
-        # Draw player lives
+        # Draw characters
         player_list.draw(self.window)
+
+        # Draw player lives
         self.showText("Vidas", (50, 15), 23, (255, 255, 255))
         for i in range(0, lives):
             self.window.blit(self.heart_image, (110 + 26*i, 3))

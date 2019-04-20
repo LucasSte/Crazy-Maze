@@ -1,94 +1,83 @@
 import pygame
 from open_window import Window
 from open_window import Action
+from algorithm import AuxFunc
 import numpy as np
 
 
 class Character(pygame.sprite.Sprite, Window):
 
-    def __init__(self, start_position_x, start_position_y, lives):
+    def __init__(self, lives, window, start_position=(1, 1)):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         self.frame = 0
+        self.size = (int(window.pxl_x-1), int(window.pxl_y))
+
         for i in range(1, 4):
             image_aux = pygame.image.load('images/Walk(' + str(i) + ').png')
-            image_aux = pygame.transform.scale(image_aux, (27, 33))
+            image_aux = pygame.transform.scale(image_aux, self.size)
             self.images.append(image_aux)
             self.image = self.images[0]
             self.rect = self.image.get_rect()
-        self.rect.x = start_position_x
-        self.rect.y = start_position_y
-        self.lives = lives
 
-    def getCharacterNode(self, maze):
+        self.rect.x = int(start_position[0]*window.pxl_x) +1
+        self.rect.y = int(start_position[1]*window.pxl_y) +1
+        self.lives = lives
+        self.window = window
+
+    def getCharacterNode(self, maze):  # of your center
 
         matrix_shape = maze.matrix.shape
 
-        player_matrix_x = int(self.rect.x*matrix_shape[1]/Window.size[0])
-        player_matrix_y = int(self.rect.y*matrix_shape[0]/Window.size[1])
+        player_matrix_x = int((self.rect.x+self.window.pxl_x/2)*matrix_shape[1]/Window.size[0])
+        player_matrix_y = int((self.rect.y+self.window.pxl_y/2)*matrix_shape[0]/Window.size[1])
 
         player_node = (player_matrix_y, player_matrix_x)
 
         return player_node
 
-    def control(self, y, x, maze, window):
+    def rectDownRight(self):
+        pos = (self.rect.x + self.size[0], self.rect.y + self.size[1])
+        return pos
 
-        matrix_shape = maze.matrix.shape
 
-        desired_matrix_x = int((self.rect.x+x)*matrix_shape[1]/Window.size[0])
-        desired_matrix_y = int((self.rect.y+y)*matrix_shape[0]/Window.size[1])
+    def control(self, y, x, maze):
 
-        if maze.matrix[desired_matrix_y][desired_matrix_x] == 0:
+        downRightPos = self.rectDownRight()
+        max_pos_x = downRightPos[0] + 4*x -7# o -7 eh para dar uma folga no seu cabelo da frente
+        min_pos_x = self.rect.x + 4*x +7  # o +7 eh para dar uma folga nas suas costas
+        max_pos_y = downRightPos[1] + 4 * y
+        min_pos_y = self.rect.y + 4 * y +15  ## o +15 eh para dar uma folga no seu cabelo
 
-            if maze.matrix[desired_matrix_y][desired_matrix_x + 1] == 1 and x > 0:
-                if x + self.rect.x < desired_matrix_x*window.pxl_y + 18:
-                    self.rect.x += x
-                    if x > 0:
-                        self.frame += 1
-                        self.frame = self.frame % 3
-                        self.image = self.images[self.frame]
-                    elif x < 0:
-                        self.frame -= 1
-                        if self.frame < 0:
-                            self.frame = 2
-                        self.image = self.images[self.frame]
-            else:
-                self.rect.x += x
-                if x > 0:
-                    self.frame += 1
-                    self.frame = self.frame % 3
-                    self.image = self.images[self.frame]
-                elif x < 0:
-                    self.frame -= 1
-                    if self.frame < 0:
-                        self.frame = 2
-                    self.image = self.images[self.frame]
+        if x > 0:
+            desired_pos1 = (max_pos_x, min_pos_y)
+            desired_pos2 = (max_pos_x, max_pos_y)
+        elif x < 0:
+            desired_pos1 = (min_pos_x, min_pos_y)
+            desired_pos2 = (min_pos_x, max_pos_y)
+        elif y > 0:
+            desired_pos1 = (min_pos_x, max_pos_y)
+            desired_pos2 = (max_pos_x, max_pos_y)
+        elif y < 0:
+            desired_pos1 = (min_pos_x, min_pos_y)
+            desired_pos2 = (max_pos_x, min_pos_y)
 
-            if y > 0 and maze.matrix[desired_matrix_y + 1][desired_matrix_x] == 1:
+        desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze, self.window)
+        desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze, self.window)
 
-                if not y + self.rect.y > desired_matrix_y*window.pxl_x + 8:
-                    self.rect.y += y
-                    if y > 0:
-                        self.frame += 1
-                        self.frame = self.frame % 3
-                        self.image = self.images[self.frame]
-                    elif y < 0:
-                        self.frame -= 1
-                        if self.frame < 0:
-                            self.frame = 2
-                        self.image = self.images[self.frame]
-
-            else:
-                self.rect.y += y
-                if y > 0:
-                    self.frame += 1
-                    self.frame = self.frame % 3
-                    self.image = self.images[self.frame]
-                elif y < 0:
-                    self.frame -= 1
-                    if self.frame < 0:
-                        self.frame = 2
-                    self.image = self.images[self.frame]
+        if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+            self.rect.x += 4*x
+            self.rect.y += 4*y
+            if x > 0 or y > 0:
+                self.frame += 1
+                self.frame = self.frame % 3
+                self.image = self.images[self.frame]
+            elif x < 0 or y < 0:
+                self.frame -= 1
+                if self.frame < 0:
+                    self.frame = 2
+                self.image = self.images[self.frame]
 
     def updateLives(self, number):
         self.lives += number

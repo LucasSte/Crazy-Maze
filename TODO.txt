@@ -1,12 +1,12 @@
 Steuernagel:
     - Ajustar direção do caminhar
         (não andar de costas)
-    - Identificar quando o personagem atinge o fim do labirinto
     
     Sugestões:
         - Colocar correr com Shift
 
 Ocimar:
-    - Fazer tela de YOU WIN!
+    - fazer letras brancas
+    - revisar sistema de colisão
     - Adicionar trilha sonora
     - corrigir node vs Cell 

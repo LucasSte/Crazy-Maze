@@ -9,7 +9,7 @@ from algorithm import Algorithm
 # IMPORTANTE: Para que o labirinto seja dinamico, o jogador nao deve
 #             ocupar uma poscao que antes era de uma parede, apenas posicao de celulas
 
-# Ao longo do codigo tem-se usado a seguinte padroniacao:
+# Ao longo do codigo tem-se usado a seguinte notacao:
 #   - cell = noh do grafo
 #   - node = posicao na matriz que descreve o labirinto
 ## sim, eh uma notacao confusa e deve ser ajeitada
@@ -28,7 +28,7 @@ class Maze:
         # Transition variable:
         self.update_counter = 0
         self.delay_counter = 0
-        self.max_delay_counter = 500
+        self.max_delay_counter = 10000
         self.mazes_matrices = []
 
         self.matrix = Algorithm.prim(self)
