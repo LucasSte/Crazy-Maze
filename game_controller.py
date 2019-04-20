@@ -49,9 +49,9 @@ class GameController:
         player = Character(10, self.game_window)
         player_list = pygame.sprite.Group()
 
-        red_monster = Monster('images/monster1.png', 33, 605, 2)
-        green_monster = Monster('images/monster2.png', 935, 32, 2)
-        ugly_monster = Monster('images/monster3.png', 935, 32, 1)
+        red_monster = Monster('images/monster1.png', 33, 605, 3)
+        green_monster = Monster('images/monster2.png', 935, 32, 3)
+        ugly_monster = Monster('images/monster3.png', 935, 32, 2)
         player_list.add(player)
         player_list.add(red_monster)
         player_list.add(green_monster)
@@ -69,6 +69,8 @@ class GameController:
             # update maze:
             game_maze.updateMaze(player.getCharacterNode(game_maze))
             self.game_window.showMazeScreen(player_list, game_maze, player.lives)
+            ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
+                                                        self.game_window, game_maze, player_list)
 
             # Move characters
             keys = pygame.key.get_pressed()

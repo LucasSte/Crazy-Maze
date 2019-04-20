@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.random import randint as rand
 import copy
-
+from heapq import *
 
 
 class Node:
@@ -20,74 +20,6 @@ class Node:
 
 
 class Algorithm:
-
-    @staticmethod
-    def aStar(maze, start, end):
-
-        start_node = Node(None, start)
-        start_node.g = start_node.h = start_node.f = 0
-        end_node = Node(None, end)
-        end_node.g = end_node.h = end_node.f = 0
-
-        open_list = []
-        closed_list = []
-
-        open_list.append(start_node)
-
-        while len(open_list) > 0:
-
-            current_node = open_list[0]
-            current_index = 0
-            for index, item in enumerate(open_list):
-                if item.f < current_node.f:
-                    current_node = item
-                    current_index = index
-
-            open_list.pop(current_index)
-            closed_list.append(current_node)
-
-            if current_node == end_node:
-                path = []
-                current = current_node
-                while current is not None:
-                    path.append(current.position)
-                    current = current.parent
-                return path
-
-            children = []
-
-            for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]:
-
-                node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
-
-                if node_position[0] > (len(maze) -1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
-                    continue
-
-                if maze[node_position[0]][node_position[1]] != 0:
-                    continue
-
-                if Node(current_node, node_position) in closed_list:
-                    continue
-
-                new_node = Node(current_node, node_position)
-
-                children.append(new_node)
-
-            for child in children:
-
-                for closed_child in closed_list:
-                    if child == closed_child:
-                        continue
-
-                child.g = current_node.g + 1
-                child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
-                child.f = child.g + child.h
-
-                for open_node in open_list:
-                    if child == open_node and child.g > open_node.g:
-                        continue
-
-                open_list.append(child)
 
     @staticmethod
     def prim(maze):
@@ -135,6 +67,56 @@ class Algorithm:
 
         return matrix
 
+    @staticmethod
+    def aStar(array, start, goal):
+
+        neighbors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+        close_set = set()
+        came_from = {}
+        gscore = {start: 0}
+        fscore = {start: AuxFunc.heuristic(start, goal)}
+        oheap = []
+
+        heappush(oheap, (fscore[start], start))
+
+        while oheap:
+
+            current = heappop(oheap)[1]
+
+            if current == goal:
+                data = []
+                while current in came_from:
+                    data.append(current)
+                    current = came_from[current]
+                return data
+
+            close_set.add(current)
+            for i, j in neighbors:
+                neighbor = current[0] + i, current[1] + j
+                tentative_g_score = gscore[current] + AuxFunc.heuristic(current, neighbor)
+                if 0 <= neighbor[0] < array.shape[0]:
+                    if 0 <= neighbor[1] < array.shape[1]:
+                        if array[neighbor[0]][neighbor[1]] == 1:
+                            continue
+                    else:
+                        # array bound y walls
+                        continue
+                else:
+                    # array bound x walls
+                    continue
+
+                if neighbor in close_set and tentative_g_score >= gscore.get(neighbor, 0):
+                    continue
+
+                if tentative_g_score < gscore.get(neighbor, 0) or neighbor not in [i[1] for i in oheap]:
+                    came_from[neighbor] = current
+                    gscore[neighbor] = tentative_g_score
+                    fscore[neighbor] = tentative_g_score + AuxFunc.heuristic(neighbor, goal)
+                    heappush(oheap, (fscore[neighbor], neighbor))
+
+        return None
+
 
 class AuxFunc:
 
@@ -149,3 +131,7 @@ class AuxFunc:
         character_node = (character_matrix_y, character_matrix_x)
 
         return character_node
+
+    @staticmethod
+    def heuristic(a, b):
+        return (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2
