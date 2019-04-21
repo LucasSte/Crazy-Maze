@@ -1,23 +1,6 @@
 import numpy as np
 from numpy.random import randint as rand
-import copy
 from heapq import *
-
-
-class Node:
-    # node class for A* Pathfinding
-
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-
-        self.g = 0
-        self.h = 0
-        self.f = 0
-
-    def __eq__(self, other):
-        return self.position == other.position
-
 
 class Algorithm:
 
@@ -68,21 +51,21 @@ class Algorithm:
         return matrix
 
     @staticmethod
-    def aStar(array, start, goal):
+    def aStar(matrix, start, goal):
 
         neighbors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
 
-        close_set = set()
+        closed_set = set()
         came_from = {}
-        gscore = {start: 0}
-        fscore = {start: AuxFunc.heuristic(start, goal)}
-        oheap = []
+        g_score = {start: 0}
+        f_score = {start: AuxFunc.heuristic(start, goal)}
+        o_heap = []
 
-        heappush(oheap, (fscore[start], start))
+        heappush(o_heap, (f_score[start], start))
 
-        while oheap:
+        while o_heap:
 
-            current = heappop(oheap)[1]
+            current = heappop(o_heap)[1]
 
             if current == goal:
                 data = []
@@ -91,13 +74,13 @@ class Algorithm:
                     current = came_from[current]
                 return data
 
-            close_set.add(current)
+            closed_set.add(current)
             for i, j in neighbors:
                 neighbor = current[0] + i, current[1] + j
-                tentative_g_score = gscore[current] + AuxFunc.heuristic(current, neighbor)
-                if 0 <= neighbor[0] < array.shape[0]:
-                    if 0 <= neighbor[1] < array.shape[1]:
-                        if array[neighbor[0]][neighbor[1]] == 1:
+                tentative_g_score = g_score[current] + AuxFunc.heuristic(current, neighbor)
+                if 0 <= neighbor[0] < matrix.shape[0]:
+                    if 0 <= neighbor[1] < matrix.shape[1]:
+                        if matrix[neighbor[0]][neighbor[1]] == 1:
                             continue
                     else:
                         # array bound y walls
@@ -106,14 +89,14 @@ class Algorithm:
                     # array bound x walls
                     continue
 
-                if neighbor in close_set and tentative_g_score >= gscore.get(neighbor, 0):
+                if neighbor in closed_set and tentative_g_score >= g_score.get(neighbor, 0):
                     continue
 
-                if tentative_g_score < gscore.get(neighbor, 0) or neighbor not in [i[1] for i in oheap]:
+                if tentative_g_score < g_score.get(neighbor, 0) or neighbor not in [i[1] for i in o_heap]:
                     came_from[neighbor] = current
-                    gscore[neighbor] = tentative_g_score
-                    fscore[neighbor] = tentative_g_score + AuxFunc.heuristic(neighbor, goal)
-                    heappush(oheap, (fscore[neighbor], neighbor))
+                    g_score[neighbor] = tentative_g_score
+                    f_score[neighbor] = tentative_g_score + AuxFunc.heuristic(neighbor, goal)
+                    heappush(o_heap, (f_score[neighbor], neighbor))
 
         return None
 

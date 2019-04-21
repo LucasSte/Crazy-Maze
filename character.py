@@ -7,7 +7,7 @@ import numpy as np
 
 class Character(pygame.sprite.Sprite, Window):
 
-    def __init__(self, lives, window, start_position=(1, 1)):
+    def __init__(self, lives, window):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         self.frame = 0
@@ -20,8 +20,8 @@ class Character(pygame.sprite.Sprite, Window):
             self.image = self.images[0]
             self.rect = self.image.get_rect()
 
-        self.rect.x = int(start_position[0]*window.pxl_x) +1
-        self.rect.y = int(start_position[1]*window.pxl_y) +1
+        self.rect.x = int(window.pxl_x) + 1
+        self.rect.y = int(window.pxl_y) + 1
         self.lives = lives
         self.window = window
 
