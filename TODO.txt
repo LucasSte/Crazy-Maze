@@ -6,7 +6,6 @@ Steuernagel:
         - Colocar correr com Shift
 
 Ocimar:
-    - fazer letras brancas
-    - revisar sistema de colisão
     - Adicionar trilha sonora
-    - corrigir node vs Cell 
+    - corrigir node vs Cell
+    - corrigir y, x para x, y

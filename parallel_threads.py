@@ -4,9 +4,9 @@ class ParallelThreads:
 
     @staticmethod
     def findMonstersNewPosition(monster_1, monster_2, monster_3, player, window, maze, player_list):
-        thread_1 = Thread(target=monster_1.findNewPosition, args=(player, maze))
-        thread_2 = Thread(target=monster_2.findNewPosition, args=(player, maze))
-        thread_3 = Thread(target=monster_3.findNewPosition, args=(player, maze))
+        thread_1 = Thread(target=monster_1.findNewPath, args=(player, maze))
+        thread_2 = Thread(target=monster_2.findNewPath, args=(player, maze))
+        thread_3 = Thread(target=monster_3.findNewPath, args=(player, maze))
         thread_4 = Thread(target=window.showMazeScreen, args=(player_list, maze, player.lives))
 
         thread_1.start()

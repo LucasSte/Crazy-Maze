@@ -2,9 +2,7 @@
 from game_controller import *
 from open_window import Action
 
-maze_shape = (15, 10)
-
-game = GameController(maze_shape)
+game = GameController()
 
 action = Action.stand_by
 
@@ -14,7 +12,7 @@ while action == Action.stand_by:
     action = game.showInitialWindow()
 
     if action == Action.change_screen:
-        action = game.playGame(maze_shape)
+        action = game.playGame()
 
     if action == Action.player_dead:
         action = game.endScreen()
