@@ -1,6 +1,5 @@
 import pygame
 from enum import Enum
-from game_controller import GameController
 
 
 class Action(Enum):
@@ -15,12 +14,13 @@ class Action(Enum):
 MISSING = object()
 
 
-class Window(GameController):
+class Window:
 
     font_location = "fonts/conthrax-sb.ttf"
-    window = pygame.display.set_mode(GameController.window_size)
+    size = (1000, 667)
+    window = pygame.display.set_mode(size)
     grass_image = pygame.image.load("images/grass2.jpg")
-    grass_image = pygame.transform.scale(grass_image, GameController.window_size)
+    grass_image = pygame.transform.scale(grass_image, size)
     heart_image = pygame.image.load("images/heart.png")
     heart_image = pygame.transform.scale(heart_image, (24,24))
     pressed_start_button = pygame.image.load("images/initial_button_pressed.png")
@@ -36,9 +36,9 @@ class Window(GameController):
     pressed_restart_button = pygame.image.load("images/restart_button_pressed.png")
     pressed_restart_button = pygame.transform.scale(pressed_restart_button, (360, 115))
     game_over_image = pygame.image.load("images/game_over.png")
-    game_over_image = pygame.transform.scale(game_over_image, GameController.window_size)
+    game_over_image = pygame.transform.scale(game_over_image, size)
     you_escaped_image = pygame.image.load("images/you_escaped.png")
-    you_escaped_image = pygame.transform.scale(you_escaped_image, GameController.window_size)
+    you_escaped_image = pygame.transform.scale(you_escaped_image, size)
 
     def __init__(self, background, maze_size):
         self.background = background
@@ -47,8 +47,8 @@ class Window(GameController):
         # showMazeScreen variables:
         ## Coloquei elas aqui, pois as imagens precisam ser carregadas apenas uma vez, caso contrario, o jogo fica
         ## muito lento
-        self.pxl_x = GameController.window_size[0] / (maze_size[0] * 2 + 1)
-        self.pxl_y = GameController.window_size[1] / (maze_size[1] * 2 + 1)
+        self.pxl_x = self.size[0] / (maze_size[0] * 2 + 1)
+        self.pxl_y = self.size[1] / (maze_size[1] * 2 + 1)
 
         self.wall_image = pygame.image.load("images/wall.png")
         self.wall_image = pygame.transform.scale(self.wall_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
@@ -56,7 +56,7 @@ class Window(GameController):
         self.exit_image = pygame.transform.scale(self.exit_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
 
         self.background_image = pygame.image.load(self.background)
-        self.background_image = pygame.transform.scale(self.background_image, GameController.window_size)
+        self.background_image = pygame.transform.scale(self.background_image, self.size)
 
     def showText(self, text, position, font_size, color):
         title_font = pygame.font.Font(self.font_location, font_size)
@@ -73,7 +73,7 @@ class Window(GameController):
 
     def initialWindow(self):
         pygame.display.set_caption("Crazy Maze")
-        self.window.blit(self.start_button, (GameController.window_size[0] / 2 - 180, 450))
+        self.window.blit(self.start_button, (self.size[0] / 2 - 180, 450))
         self.window.blit(self.background_image, (0, 0))
         self.showImage("images/title_initial.png", (2, 40), (int(1996 / 2), int(667 / 2)))
 
@@ -108,17 +108,17 @@ class Window(GameController):
         if time <= 60:
             time = int(time*100)
             time = time/100.0
-            self.showText("Em apenas " + str(time) + " segundos no jogo!", (GameController.window_size[0] / 2, 400), 25, (255, 255, 255))
+            self.showText("Em apenas " + str(time) + " segundos no jogo!", (self.size[0] / 2, 400), 25, (255, 255, 255))
         else:
             time = time/60
             time = int(time*100)
             time = time/100.0
-            self.showText("Em apenas " + str(time) + " minutos no jogo!", (GameController.window_size[0] / 2, 400), 25, (255, 255, 255))
+            self.showText("Em apenas " + str(time) + " minutos no jogo!", (self.size[0] / 2, 400), 25, (255, 255, 255))
 
         # self.showText("Tente sair do labirinto", (470, 210), 40, (23, 39, 36))
         # self.showText("sã e salvo!", (470, 250), 40, (23, 39, 36))
-        self.window.blit(self.restart_button, (GameController.window_size[0] / 4 - 180, 500))
-        self.window.blit(self.exit_button, (3*GameController.window_size[0] / 4 - 180, 500))
+        self.window.blit(self.restart_button, (self.size[0] / 4 - 180, 500))
+        self.window.blit(self.exit_button, (3*self.size[0] / 4 - 180, 500))
 
 
     def showWinningScreen(self, time):
@@ -129,11 +129,11 @@ class Window(GameController):
         if time <= 60:
             time = int(time * 100)
             time = time / 100.0
-            self.showText("Em um total de " + str(time) + " segundos no jogo!", (GameController.window_size[0] / 2, 180), 25,
+            self.showText("Em um total de " + str(time) + " segundos no jogo!", (self.size[0] / 2, 180), 25,
                           (23, 39, 36))
         else:
             time = time / 60
             time = int(time * 100)
             time = time / 100.0
-            self.showText("Em um total de " + str(time) + " minutos no jogo!", (GameController.window_size[0] / 2, 180), 25,
+            self.showText("Em um total de " + str(time) + " minutos no jogo!", (self.size[0] / 2, 180), 25,
                           (23, 39, 36))
