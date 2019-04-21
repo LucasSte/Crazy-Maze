@@ -100,8 +100,8 @@ class Character(GameController, pygame.sprite.Sprite, Window):
             else:
                 desired_pos1 = (min_pos_x + 4 * x, min_pos_y)
                 desired_pos2 = (min_pos_x + 4 * x, max_pos_y)
-                desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze, self.window)
-                desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze, self.window)
+                desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+                desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
                 if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
                         maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
                     blocked = False
