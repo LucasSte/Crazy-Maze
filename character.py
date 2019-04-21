@@ -3,9 +3,10 @@ from open_window import Window
 from open_window import Action
 from algorithm import AuxFunc
 import numpy as np
+from game_controller import GameController
 
 
-class Character(pygame.sprite.Sprite, Window):
+class Character(GameController, pygame.sprite.Sprite, Window):
 
     def __init__(self, lives, window):
         pygame.sprite.Sprite.__init__(self)
@@ -23,7 +24,6 @@ class Character(pygame.sprite.Sprite, Window):
         self.rect.x = int(window.pxl_x) + 1
         self.rect.y = int(window.pxl_y) + 1
         self.lives = lives
-        self.window = window
 
     def getCharacterNode(self, maze):  # of your center
 
@@ -36,39 +36,97 @@ class Character(pygame.sprite.Sprite, Window):
 
         return player_node
 
-    def rectDownRight(self):
-        pos = (self.rect.x + self.size[0], self.rect.y + self.size[1])
-        return pos
-
 
     def control(self, y, x, maze):
 
-        downRightPos = self.rectDownRight()
-        max_pos_x = downRightPos[0] + 4*x -7# o -7 eh para dar uma folga no seu cabelo da frente
-        min_pos_x = self.rect.x + 4*x +7  # o +7 eh para dar uma folga nas suas costas
-        max_pos_y = downRightPos[1] + 4 * y
-        min_pos_y = self.rect.y + 4 * y +15  ## o +15 eh para dar uma folga no seu cabelo
+        # character's current position:
+        downRightPos = (self.rect.x + self.size[0], self.rect.y + self.size[1])
+        max_pos_x = downRightPos[0] - 7  # o -7 eh para dar uma folga no seu cabelo da frente
+        min_pos_x = self.rect.x + 7  # o +7 eh para dar uma folga nas suas costas
+        max_pos_y = downRightPos[1]
+        min_pos_y = self.rect.y + 15  ## o +15 eh para dar uma folga no seu cabelo
+
+        can_move = False
+        blocked = True
 
         if x > 0:
-            desired_pos1 = (max_pos_x, min_pos_y)
-            desired_pos2 = (max_pos_x, max_pos_y)
+            desired_pos1 = (max_pos_x + 4 * x, min_pos_y)
+            desired_pos2 = (max_pos_x + 4 * x, max_pos_y)
+            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                can_move = True
+                blocked = False
+
         elif x < 0:
-            desired_pos1 = (min_pos_x, min_pos_y)
-            desired_pos2 = (min_pos_x, max_pos_y)
+            desired_pos1 = (min_pos_x + 4 * x, min_pos_y)
+            desired_pos2 = (min_pos_x + 4 * x, max_pos_y)
+            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                can_move = True
+                blocked = False
+
         elif y > 0:
-            desired_pos1 = (min_pos_x, max_pos_y)
-            desired_pos2 = (max_pos_x, max_pos_y)
+            desired_pos1 = (min_pos_x, max_pos_y + 4 * y)
+            desired_pos2 = (max_pos_x, max_pos_y + 4 * y)
+            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                can_move = True
+                blocked = False
+
         elif y < 0:
-            desired_pos1 = (min_pos_x, min_pos_y)
-            desired_pos2 = (max_pos_x, min_pos_y)
+            desired_pos1 = (min_pos_x, min_pos_y + 4 * y)
+            desired_pos2 = (max_pos_x, min_pos_y + 4 * y)
+            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                can_move = True
+                blocked = False
 
-        desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze, self.window)
-        desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze, self.window)
+        if blocked:
+            desired_pos1 = (max_pos_x + 4 * x, min_pos_y)
+            desired_pos2 = (max_pos_x + 4 * x, max_pos_y)
+            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                blocked = False
+            else:
+                desired_pos1 = (min_pos_x + 4 * x, min_pos_y)
+                desired_pos2 = (min_pos_x + 4 * x, max_pos_y)
+                desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+                desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+                if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                        maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                    blocked = False
 
-        if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-            self.rect.x += 4*x
-            self.rect.y += 4*y
+                else:
+                    desired_pos1 = (min_pos_x, max_pos_y + 4 * y)
+                    desired_pos2 = (max_pos_x, max_pos_y + 4 * y)
+                    desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+                    desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+                    if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                            maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                        blocked = False
+
+                    else:
+                        desired_pos1 = (min_pos_x, min_pos_y + 4 * y)
+                        desired_pos2 = (max_pos_x, min_pos_y + 4 * y)
+                        desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
+                        desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
+                        if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+                                maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+                            blocked = False
+
+        if can_move or blocked:
+            self.rect.x += 4 * x
+            self.rect.y += 4 * y
             if x > 0 or y > 0:
                 self.frame += 1
                 self.frame = self.frame % 3
@@ -78,6 +136,46 @@ class Character(pygame.sprite.Sprite, Window):
                 if self.frame < 0:
                     self.frame = 2
                 self.image = self.images[self.frame]
+
+        # # character's current position:
+        # downRightPos = (self.rect.x + self.size[0], self.rect.y + self.size[1])
+        # max_pos_x = downRightPos[0]-7# o -7 eh para dar uma folga no seu cabelo da frente
+        # min_pos_x = self.rect.x +7  # o +7 eh para dar uma folga nas suas costas
+        # max_pos_y = downRightPos[1]
+        # min_pos_y = self.rect.y +15  ## o +15 eh para dar uma folga no seu cabelo
+        #
+        # if x > 0:
+        #     desired_pos1 = (max_pos_x + 4*x, min_pos_y)
+        #     desired_pos2 = (max_pos_x + 4*x, max_pos_y)
+        #
+        # elif x < 0:
+        #     desired_pos1 = (min_pos_x + 4*x, min_pos_y)
+        #     desired_pos2 = (min_pos_x + 4*x, max_pos_y)
+        #
+        # elif y > 0:
+        #     desired_pos1 = (min_pos_x, max_pos_y + 4*y)
+        #     desired_pos2 = (max_pos_x, max_pos_y + 4*y)
+        #
+        # elif y < 0:
+        #     desired_pos1 = (min_pos_x, min_pos_y + 4*y)
+        #     desired_pos2 = (max_pos_x, min_pos_y + 4*y)
+        #
+        # desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze, self.window)
+        # desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze, self.window)
+        #
+        # if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
+        #         maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
+        #     self.rect.x += 4*x
+        #     self.rect.y += 4*y
+        #     if x > 0 or y > 0:
+        #         self.frame += 1
+        #         self.frame = self.frame % 3
+        #         self.image = self.images[self.frame]
+        #     elif x < 0 or y < 0:
+        #         self.frame -= 1
+        #         if self.frame < 0:
+        #             self.frame = 2
+        #         self.image = self.images[self.frame]
 
     def updateLives(self, number):
         self.lives += number
@@ -97,7 +195,7 @@ class Character(pygame.sprite.Sprite, Window):
             self.rect.y += 1
 
             monster_1.resetPosition()
-            monster_1.findNewPosition(self, maze)
+            monster_1.findNewPath(self, maze)
 
             return self.updateLives(-1)
 
@@ -106,7 +204,7 @@ class Character(pygame.sprite.Sprite, Window):
             self.rect.y += 1
 
             monster_2.resetPosition()
-            monster_2.findNewPosition(self, maze)
+            monster_2.findNewPath(self, maze)
 
             return self.updateLives(-1)
 
@@ -115,7 +213,7 @@ class Character(pygame.sprite.Sprite, Window):
             self.rect.y += 1
 
             monster_3.resetPosition()
-            monster_3.findNewPosition(self, maze)
+            monster_3.findNewPath(self, maze)
 
             return self.updateLives(-1)
 
