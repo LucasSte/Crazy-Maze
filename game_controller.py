@@ -50,9 +50,9 @@ class GameController:
         player = Character(3, self.game_window)
         player_list = pygame.sprite.Group()
 
-        red_monster = Monster('images/monster1.png', (1, game_maze.height - 2), 3, self.game_window)
-        green_monster = Monster('images/monster2.png', (game_maze.width - 2, 1), 2, self.game_window)
-        ugly_monster = Monster('images/monster3.png', (game_maze.width - 2, 1), 3, self.game_window)
+        red_monster = Monster('images/monster1.png', (1, game_maze.height - 2), 2, self.game_window)
+        green_monster = Monster('images/monster2.png', (game_maze.width - 2, 1), 1, self.game_window)
+        ugly_monster = Monster('images/monster3.png', (game_maze.width - 2, 1), 2, self.game_window)
         player_list.add(player)
         player_list.add(red_monster)
         player_list.add(green_monster)
