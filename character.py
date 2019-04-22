@@ -1,11 +1,10 @@
 import pygame
-from open_window import Window
 from open_window import Action
 from algorithm import AuxFunc
 import numpy as np
 
 
-class Character(pygame.sprite.Sprite, Window):
+class Character(pygame.sprite.Sprite):
 
     def __init__(self, lives, window):
         pygame.sprite.Sprite.__init__(self)
@@ -24,12 +23,12 @@ class Character(pygame.sprite.Sprite, Window):
         self.rect.y = int(window.pxl_y) + 1
         self.lives = lives
 
-    def getCharacterNode(self, maze, window):  # of your center
+    def getCharacterNode(self, game_controller):  # of your center
 
-        matrix_shape = maze.matrix.shape
+        matrix_shape = game_controller.matrix.shape
 
-        player_matrix_x = int((self.rect.x+window.pxl_x/2)*matrix_shape[1]/Window.size[0])
-        player_matrix_y = int((self.rect.y+window.pxl_y/2)*matrix_shape[0]/Window.size[1])
+        player_matrix_x = int((self.rect.x+game_controller.pxl_x/2)*matrix_shape[1]/game_controller.size[0])
+        player_matrix_y = int((self.rect.y+game_controller.pxl_y/2)*matrix_shape[0]/game_controller.size[1])
 
         player_node = (player_matrix_y, player_matrix_x)
 
@@ -145,7 +144,7 @@ class Character(pygame.sprite.Sprite, Window):
         else:
             return Action.stand_by
 
-    def detectMonsterCollision(self, monster_1, monster_2, monster_3, maze, window):
+    def detectMonsterCollision(self, monster_1, monster_2, monster_3, game_controller):
 
         monster_1_distance = np.sqrt((monster_1.rect.x - self.rect.x)**2 + (monster_1.rect.y - self.rect.y)**2)
         monster_2_distance = np.sqrt((monster_2.rect.x - self.rect.x)**2 + (monster_2.rect.y - self.rect.y)**2)
@@ -156,7 +155,7 @@ class Character(pygame.sprite.Sprite, Window):
             self.rect.y += 1
 
             monster_1.resetPosition()
-            monster_1.findNewPath(self, maze, window)
+            monster_1.findNewPath(self, game_controller)
 
             return self.updateLives(-1)
 
@@ -165,7 +164,7 @@ class Character(pygame.sprite.Sprite, Window):
             self.rect.y += 1
 
             monster_2.resetPosition()
-            monster_2.findNewPath(self, maze, window)
+            monster_2.findNewPath(self, game_controller)
 
             return self.updateLives(-1)
 
@@ -174,18 +173,18 @@ class Character(pygame.sprite.Sprite, Window):
             self.rect.y += 1
 
             monster_3.resetPosition()
-            monster_3.findNewPath(self, maze, window)
+            monster_3.findNewPath(self, game_controller)
 
             return self.updateLives(-1)
 
         else:
             return Action.stand_by
 
-    def detectWin(self, maze, action_local, window):
-        postition = self.getCharacterNode(maze, window)
+    def detectWin(self, action_local, game_controller):
+        postition = self.getCharacterNode(game_controller)
 
         # winning has preference
-        if postition[1] == maze.width - 2 and postition[0] == maze.height - 2:
+        if postition[1] == game_controller.width - 2 and postition[0] == game_controller.height - 2:
             return Action.player_win
 
         return action_local

@@ -52,15 +52,15 @@ class Monster(Window, pygame.sprite.Sprite):
 
         return monster_node
 
-    def findNewPath(self, player, maze, window):
+    def findNewPath(self, player, game_controller):
 
         # aStar eh muito pesado e estava causando lag no jogo, adicionei um delay para sua execucao:
         if self.aStar_counter == 0 or self.aStar_counter > self.aStar_delay:
-            player_node = player.getCharacterNode(maze, window)
-            monster_node = self.getMonsterNode(maze)
-            if maze.matrix[player_node[0]][player_node[1]] == 0:
+            player_node = player.getCharacterNode(game_controller)
+            monster_node = self.getMonsterNode(game_controller)
+            if game_controller.matrix[player_node[0]][player_node[1]] == 0:
                 if self.last_monster_node_x != monster_node[0] or self.last_monster_node_y != monster_node[1]:
-                    self.path_to_player = Algorithm.aStar(maze.matrix, monster_node, player_node)
+                    self.path_to_player = Algorithm.aStar(game_controller.matrix, monster_node, player_node)
 
             self.aStar_counter = 0
 
