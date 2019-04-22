@@ -3,9 +3,11 @@ from maze import *
 from monster import *
 from parallel_threads import ParallelThreads
 import time
+import pygame
 
 
 class GameController(Window, Maze):
+    pygame.mixer.init()
 
     playing_time = 0
 
@@ -18,7 +20,14 @@ class GameController(Window, Maze):
     def showInitialWindow(self):
         self.initialWindow()
         action = Action.stand_by
+
+        pygame.mixer.music.load("sounds/initial_track.mp3")
+        pygame.mixer.music.play()
+
         while action == Action.stand_by:
+
+            if not pygame.mixer.music.get_busy():
+                pygame.mixer.music.play()
 
             mx, my = pygame.mouse.get_pos()
 
@@ -31,10 +40,10 @@ class GameController(Window, Maze):
                             450 <= my <= 555.5:
                         action = Action.change_screen
 
-            if (self.size[0] / 2 - 180) <= mx <= (self.size[0] / 2 + 180) and\
+            if (self.size[0] / 2 - 180) <= mx <= (self.size[0] / 2 + 180) and \
                     450 <= my <= 555.5:
                 self.window.blit(self.pressed_start_button, (self.size[0] / 2 - 180,
-                                                                                     450))
+                                                             450))
 
             else:
                 self.window.blit(self.start_button, (self.size[0] / 2 - 180, 450))
@@ -56,13 +65,16 @@ class GameController(Window, Maze):
         player_list.add(green_monster)
         player_list.add(ugly_monster)
 
+        pygame.mixer.music.load("sounds/gameplay_track.mp3")
+        pygame.mixer.music.play()
 
         action_local = Action.stand_by
 
         start_time = time.time()
 
         while action_local == Action.stand_by:
-
+            if not pygame.mixer.music.get_busy():
+                pygame.mixer.music.play()
             # update maze:
             self.updateMaze(player.getCharacterNode(self))
             self.showMazeScreen(player_list, self, player.lives)
@@ -119,6 +131,9 @@ class GameController(Window, Maze):
         return action_local
 
     def endScreen(self):
+        pygame.mixer.music.load("sounds/defeat_track.mp3")
+        pygame.mixer.music.play()
+
         exit_position = ((3 * self.size[0] / 4 - 180), 500)
         restart_position = (self.size[0] / 4 - 180, 500)
 
@@ -127,6 +142,8 @@ class GameController(Window, Maze):
         action = Action.local_loop
 
         while action == Action.local_loop:
+            if not pygame.mixer.music.get_busy():
+                pygame.mixer.music.play()
 
             mx, my = pygame.mouse.get_pos()
 
@@ -161,6 +178,9 @@ class GameController(Window, Maze):
         return action
 
     def winningScreen(self):
+        pygame.mixer.music.load("sounds/victory_track.mp3")
+        pygame.mixer.music.play()
+
         restart_position = (self.size[0] / 4 - 235, 490)
         exit_position = ((3 * self.size[0] / 4 - 140), 490)
 
@@ -169,6 +189,8 @@ class GameController(Window, Maze):
         action = Action.local_loop
 
         while action == Action.local_loop:
+            if not pygame.mixer.music.get_busy():
+                pygame.mixer.music.play()
 
             mx, my = pygame.mouse.get_pos()
 
