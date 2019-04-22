@@ -67,16 +67,16 @@ class Monster(pygame.sprite.Sprite):
         self.aStar_counter = self.aStar_counter + 1
 
 
-    def inOnlyOneNode(self, maze, window):
-        up_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y, maze, window)
-        up_right_corner = AuxFunc.getNode(self.rect.x+self.size[0], self.rect.y, maze, window)
+    def inOnlyOneNode(self, maze):
+        up_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y, maze)
+        up_right_corner = AuxFunc.getNode(self.rect.x+self.size[0], self.rect.y, maze)
 
         if up_left_corner[0] != up_right_corner[0] or up_left_corner[1] != up_right_corner[1]:
             return False
-        down_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y + self.size[1], maze, window)
+        down_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y + self.size[1], maze)
         if up_left_corner[0] != down_left_corner[0] or up_left_corner[1] != down_left_corner[1]:
             return False
-        down_right_corner = AuxFunc.getNode(self.rect.x + self.size[0], self.rect.y+self.size[1], maze, window)
+        down_right_corner = AuxFunc.getNode(self.rect.x + self.size[0], self.rect.y+self.size[1], maze)
         if up_left_corner[0] != down_right_corner[0] or up_left_corner[1] != down_right_corner[1]:
             return False
         else:
@@ -99,30 +99,3 @@ class Monster(pygame.sprite.Sprite):
                 self.rect.x += self.speed
             else:
                 self.path_to_player.pop()
-
-            # if self.inOnlyOneNode(maze, window):
-            #     # print("in only")
-            #     if down_right_corner[0] - next_node[0] > 0:
-            #         self.rect.y -= self.speed
-            #         self.last_movement = Move.up
-            #     elif up_left_corner[0] - next_node[0] < 0:
-            #         self.rect.y += self.speed
-            #         self.last_movement = Move.down
-            #     elif down_right_corner[1] - next_node[1] > 0:
-            #         self.rect.x -= self.speed
-            #         self.last_movement = Move.left
-            #     elif up_left_corner[1] - next_node[1] < 0:
-            #         self.rect.x += self.speed
-            #         self.last_movement = Move.right
-            #     else:
-            #         self.updateNextNode(window)
-            # else:
-            #     # print("not in only")
-            #     if self.last_movement == Move.up:
-            #         self.rect.y -= self.speed
-            #     elif self.last_movement == Move.down:
-            #         self.rect.y += self.speed
-            #     elif self.last_movement == Move.left:
-            #         self.rect.x -= self.speed
-            #     elif self.last_movement == Move.right:
-            #         self.rect.x += self.speed

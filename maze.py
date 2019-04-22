@@ -28,7 +28,7 @@ class Maze:
         # Transition variable:
         self.update_counter = 0
         self.delay_counter = 0
-        self.max_delay_counter = 10
+        self.max_delay_counter = 25
         self.mazes_matrices = []
 
         self.matrix = Algorithm.prim(self)
