@@ -135,7 +135,7 @@ class Character(pygame.sprite.Sprite, Window):
                     self.frame = 2
                 self.image = self.images[self.frame]
 
-    
+
 
     def updateLives(self, number):
         self.lives += number
@@ -146,6 +146,7 @@ class Character(pygame.sprite.Sprite, Window):
             return Action.stand_by
 
     def detectMonsterCollision(self, monster_1, monster_2, monster_3, maze, window):
+
         monster_1_distance = np.sqrt((monster_1.rect.x - self.rect.x)**2 + (monster_1.rect.y - self.rect.y)**2)
         monster_2_distance = np.sqrt((monster_2.rect.x - self.rect.x)**2 + (monster_2.rect.y - self.rect.y)**2)
         monster_3_distance = np.sqrt((monster_3.rect.x - self.rect.x)**2 + (monster_3.rect.y - self.rect.y)**2)
