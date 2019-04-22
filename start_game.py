@@ -1,5 +1,5 @@
 # import everything here
-from game_controller import *
+from game_controller import GameController
 from open_window import Action
 
 maze_shape = (15, 10)

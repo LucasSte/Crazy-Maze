@@ -2,6 +2,7 @@ import numpy as np
 from numpy.random import randint as rand
 from open_window import Window
 from heapq import *
+from global_variables import Global_variables
 
 class Algorithm:
 
@@ -9,45 +10,47 @@ class Algorithm:
     def prim(maze):
 
         matrix = np.array(
-            [[1] * maze.width, [1, 0] * maze.num_cells_x + [1]] * maze.num_cells_y + [[1] * maze.width], dtype=int)
+            [[1] * maze.width, [1, 0] * maze.num_nodes_x + [1]] * maze.num_nodes_y + [[1] * maze.width], dtype=int)
 
-        visited = np.zeros([maze.num_cells_y, maze.num_cells_x], dtype=bool)
+        matrix = [*zip(*matrix)] # Matrix Transpose (for easy reading | M[x][y] instead of M[y][x])
 
-        # Mark the cell as visited and add to set
-        visited[maze.start_cell[1], maze.start_cell[0]] = 1
-        path = [maze.start_cell]
+        visited = np.zeros([maze.num_nodes_x, maze.num_nodes_y], dtype=bool)
 
-        # While the set of cells is not empty
+        # Mark the node as visited and add to set
+        visited[maze.start_node[0], maze.start_node[1]] = 1
+        path = [maze.start_node]
+
+        # While the set of nodes is not empty
         while len(path):
 
-            # Select randomly a cell to extend the path and remove it from the set
-            (cell_x, cell_y) = path[rand(0, len(path))]
+            # Select randomly a node to extend the path and remove it from the set
+            (node_x, node_y) = path[rand(0, len(path))]
 
             # Get available neighbours
             neighbours = []
-            if cell_x > 0 and not visited[cell_y, cell_x - 1]:
-                neighbours.append([cell_x - 1, cell_y])
+            if node_x > 0 and not visited[node_x - 1, node_y]:
+                neighbours.append((node_x - 1, node_y))
 
-            if cell_x < maze.num_cells_x - 1 and not visited[cell_y, cell_x + 1]:
-                neighbours.append([cell_x + 1, cell_y])
+            if node_x < maze.num_nodes_x - 1 and not visited[node_x + 1, node_y]:
+                neighbours.append((node_x + 1, node_y))
 
-            if cell_y > 0 and not visited[cell_y - 1, cell_x]:
-                neighbours.append([cell_x, cell_y - 1])
+            if node_y > 0 and not visited[node_x, node_y - 1]:
+                neighbours.append((node_x, node_y - 1))
 
-            if cell_y < maze.num_cells_y - 1 and not visited[cell_y + 1, cell_x]:
-                neighbours.append([cell_x, cell_y + 1])
+            if node_y < maze.num_nodes_y - 1 and not visited[node_x, node_y + 1]:
+                neighbours.append((node_x, node_y + 1))
 
-            # Remove the cell if it does not lead anywhere
+            # Remove the node if it does not lead anywhere
             if len(neighbours) == 0:
-                path.remove((cell_x, cell_y))
+                path.remove((node_x, node_y))
 
             else:
-                # Randomly connect to an available cell
+                # Randomly connect to an available node
                 [cX, cY] = neighbours[rand(0, len(neighbours))]
                 visited[cY, cX] = 1
                 path.append((cX, cY))
                 # Removes the wall between them
-                matrix[(cY + cell_y + 1), (cX + cell_x + 1)] = 0
+                matrix[(cY + node_y + 1), (cX + node_x + 1)] = 0
 
         return matrix
 
@@ -105,16 +108,16 @@ class Algorithm:
 class AuxFunc(Window):
 
     @staticmethod
-    def getNode(position_x, position_y, maze):
+    def getCell(position_x, position_y, maze):
 
         matrix_shape = maze.matrix.shape
 
-        character_matrix_x = int(position_x*matrix_shape[1]/Window.size[0])
-        character_matrix_y = int(position_y*matrix_shape[0]/Window.size[1])
+        character_matrix_x = int(position_x*matrix_shape[1]/Global_variables.window_size[0])
+        character_matrix_y = int(position_y*matrix_shape[0]/Global_variables.window_size[1])
 
-        character_node = (character_matrix_y, character_matrix_x)
+        character_cell = (character_matrix_y, character_matrix_x)
 
-        return character_node
+        return character_cell
 
     @staticmethod
     def heuristic(a, b):

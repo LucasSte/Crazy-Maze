@@ -3,14 +3,21 @@ from maze import *
 from monster import *
 from parallel_threads import ParallelThreads
 import time
+from global_variables import *
 
 
 class GameController:
+<<<<<<< Updated upstream
 
     playing_time = 0
 
     def __init__(self, maze_shape):
         self.game_window = Window('images/initial_background.jpg', maze_shape)
+=======
+
+    def __init__(self):
+        self.game_window = Window('images/initial_background.jpg')
+>>>>>>> Stashed changes
 
 
     def quitGame(self):
@@ -28,31 +35,42 @@ class GameController:
                 if event.type == pygame.QUIT:
                     action = Action.quit_game
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if (self.game_window.size[0] / 2 - 180) <= mx <= (self.game_window.size[0] / 2 + 180) and \
+                    if (Global_variables.window_size[0] / 2 - 180) <= mx <= (Global_variables.window_size[0] / 2 + 180) and \
                             450 <= my <= 555.5:
                         action = Action.change_screen
 
-            if (self.game_window.size[0] / 2 - 180) <= mx <= (self.game_window.size[0] / 2 + 180) and\
+            if (Global_variables.window_size[0] / 2 - 180) <= mx <= (Global_variables.window_size[0] / 2 + 180) and\
                     450 <= my <= 555.5:
-                self.game_window.window.blit(self.game_window.pressed_start_button, (self.game_window.size[0] / 2 - 180,
+                self.game_window.window.blit(self.game_window.pressed_start_button, (Global_variables.window_size[0] / 2 - 180,
                                                                                      450))
 
             else:
-                self.game_window.window.blit(self.game_window.start_button, (self.game_window.size[0] / 2 - 180, 450))
+                self.game_window.window.blit(self.game_window.start_button, (Global_variables.window_size[0] / 2 - 180, 450))
 
             pygame.display.flip()
 
         return action
 
+<<<<<<< Updated upstream
     def playGame(self, maze_shape):
         game_maze = Maze(maze_shape[0], maze_shape[1])
+=======
+    def playGame(self):
+        game_maze = Maze(Global_variables.maze_num_nodes)
+>>>>>>> Stashed changes
 
         player = Character(3, self.game_window)
         player_list = pygame.sprite.Group()
 
+<<<<<<< Updated upstream
         red_monster = Monster('images/monster1.png', (1, game_maze.height - 2), 3, self.game_window)
         green_monster = Monster('images/monster2.png', (game_maze.width - 2, 1), 2, self.game_window)
         ugly_monster = Monster('images/monster3.png', (game_maze.width - 2, 1), 3, self.game_window)
+=======
+        red_monster = Monster('images/monster1.png', (1, game_maze.height - 2), 3)
+        green_monster = Monster('images/monster2.png', (game_maze.width - 2, 1), 3)
+        ugly_monster = Monster('images/monster3.png', (game_maze.width - 2, 1), 3)
+>>>>>>> Stashed changes
         player_list.add(player)
         player_list.add(red_monster)
         player_list.add(green_monster)
@@ -77,38 +95,63 @@ class GameController:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT] or keys[ord('a')]:
                 player.control(0, -1, game_maze)
+<<<<<<< Updated upstream
                 red_monster.updatePosition(game_maze)
                 green_monster.updatePosition(game_maze)
+=======
+                # red_monster.updatePosition(game_maze)
+                # green_monster.updatePosition(game_maze)
+>>>>>>> Stashed changes
                 ugly_monster.updatePosition(game_maze)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
             elif keys[pygame.K_RIGHT] or keys[ord('d')]:
                 player.control(0, 1, game_maze)
+<<<<<<< Updated upstream
                 red_monster.updatePosition(game_maze)
                 green_monster.updatePosition(game_maze)
+=======
+                # red_monster.updatePosition(game_maze)
+                # green_monster.updatePosition(game_maze)
+>>>>>>> Stashed changes
                 ugly_monster.updatePosition(game_maze)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
             elif keys[pygame.K_UP] or keys[ord('w')]:
                 player.control(-1, 0, game_maze)
+<<<<<<< Updated upstream
                 red_monster.updatePosition(game_maze)
                 green_monster.updatePosition(game_maze)
+=======
+                # red_monster.updatePosition(game_maze)
+                # green_monster.updatePosition(game_maze)
+>>>>>>> Stashed changes
                 ugly_monster.updatePosition(game_maze)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
             elif keys[pygame.K_DOWN] or keys[ord('s')]:
                 player.control(1, 0, game_maze)
+<<<<<<< Updated upstream
                 red_monster.updatePosition(game_maze)
                 green_monster.updatePosition(game_maze)
+=======
+                # red_monster.updatePosition(game_maze)
+                # green_monster.updatePosition(game_maze)
+>>>>>>> Stashed changes
                 ugly_monster.updatePosition(game_maze)
                 ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                         self.game_window, game_maze, player_list)
 
+<<<<<<< Updated upstream
             red_monster.updatePosition(game_maze)
             green_monster.updatePosition(game_maze)
+=======
+            # red_monster.updatePosition(game_maze)
+            # green_monster.updatePosition(game_maze)
+>>>>>>> Stashed changes
             ugly_monster.updatePosition(game_maze)
 
             action_local = player.detectMonsterCollision(red_monster, green_monster, ugly_monster,
@@ -124,8 +167,8 @@ class GameController:
         return action_local
 
     def endScreen(self):
-        exit_position = ((3 * self.game_window.size[0] / 4 - 180), 500)
-        restart_position = (self.game_window.size[0] / 4 - 180, 500)
+        exit_position = ((3 * Global_variables.window_size[0] / 4 - 180), 500)
+        restart_position = (Global_variables.window_size[0] / 4 - 180, 500)
 
         self.game_window.showEndScreen(self.playing_time)
 
@@ -166,8 +209,8 @@ class GameController:
         return action
 
     def winningScreen(self):
-        restart_position = (self.game_window.size[0] / 4 - 235, 490)
-        exit_position = ((3 * self.game_window.size[0] / 4 - 140), 490)
+        restart_position = (Global_variables.window_size[0] / 4 - 235, 490)
+        exit_position = ((3 * Global_variables.window_size[0] / 4 - 140), 490)
 
         self.game_window.showWinningScreen(self.playing_time)
 
@@ -185,7 +228,7 @@ class GameController:
                     if restart_position[0] <= mx <= restart_position[0]+360 and \
                             restart_position[1] <= my <= restart_position[1] + 105.5:
                         action = Action.stand_by
-                    elif (3 * self.game_window.size[0] / 4 - 180) <= mx <= (3 * self.game_window.size[0] / 4 + 180) and \
+                    elif (3 * Global_variables.window_size[0] / 4 - 180) <= mx <= (3 * Global_variables.window_size[0] / 4 + 180) and \
                             exit_position[1] <= my <= exit_position[1] + 105.5:
                         action = Action.quit_game
 
@@ -198,7 +241,7 @@ class GameController:
                 self.game_window.window.blit(self.game_window.restart_button,
                                              (restart_position[0], restart_position[1]))
 
-            if (3 * self.game_window.size[0] / 4 - 180) <= mx <= (3 * self.game_window.size[0] / 4 + 180) and \
+            if (3 * Global_variables.window_size[0] / 4 - 180) <= mx <= (3 * Global_variables.window_size[0] / 4 + 180) and \
                     exit_position[1] <= my <= exit_position[1] + 105.5:
                 self.game_window.window.blit(self.game_window.pressed_exit_button, exit_position)
 

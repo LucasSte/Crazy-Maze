@@ -1,5 +1,9 @@
 import pygame
 from enum import Enum
+<<<<<<< Updated upstream
+=======
+from global_variables import Global_variables
+>>>>>>> Stashed changes
 
 
 class Action(Enum):
@@ -14,6 +18,7 @@ class Action(Enum):
 MISSING = object()
 
 
+<<<<<<< Updated upstream
 class Window:
 
     font_location = "fonts/conthrax-sb.ttf"
@@ -21,12 +26,28 @@ class Window:
     window = pygame.display.set_mode(size)
     grass_image = pygame.image.load("images/grass2.jpg")
     grass_image = pygame.transform.scale(grass_image, size)
+=======
+class Window(Global_variables):
+
+    font_location = "fonts/conthrax-sb.ttf"
+    window = pygame.display.set_mode(Global_variables.window_size)
+
+    # maze images:
+    grass_image = pygame.image.load("images/grass2.jpg")
+    grass_image = pygame.transform.scale(grass_image, Global_variables.window_size)
+    wall_image = pygame.image.load("images/wall.png")
+    wall_image = pygame.transform.scale(wall_image, (int(Global_variables.cell_size_x + 1), int(Global_variables.cell_size_y + 1)))
+    exit_image = pygame.image.load("images/exit.png")
+    exit_image = pygame.transform.scale(exit_image, (int(Global_variables.cell_size_x + 1), int(Global_variables.cell_size_y + 1)))
+>>>>>>> Stashed changes
     heart_image = pygame.image.load("images/heart.png")
     heart_image = pygame.transform.scale(heart_image, (24,24))
-    pressed_start_button = pygame.image.load("images/initial_button_pressed.png")
-    pressed_start_button = pygame.transform.scale(pressed_start_button, (int(720 / 2), int(231 / 2)))
+
+    # Buttons:
     start_button = pygame.image.load("images/initial_button.png")
     start_button = pygame.transform.scale(start_button, (int(720 / 2), int(231 / 2)))
+    pressed_start_button = pygame.image.load("images/initial_button_pressed.png")
+    pressed_start_button = pygame.transform.scale(pressed_start_button, (int(720 / 2), int(231 / 2)))
     exit_button = pygame.image.load("images/exit_button.png")
     exit_button = pygame.transform.scale(exit_button, (360, 115))
     pressed_exit_button = pygame.image.load("images/exit_button_pressed.png")
@@ -35,28 +56,51 @@ class Window:
     restart_button = pygame.transform.scale(restart_button, (360, 115))
     pressed_restart_button = pygame.image.load("images/restart_button_pressed.png")
     pressed_restart_button = pygame.transform.scale(pressed_restart_button, (360, 115))
+
+    # Scenes images:
     game_over_image = pygame.image.load("images/game_over.png")
+<<<<<<< Updated upstream
     game_over_image = pygame.transform.scale(game_over_image, size)
     you_escaped_image = pygame.image.load("images/you_escaped.png")
     you_escaped_image = pygame.transform.scale(you_escaped_image, size)
+=======
+    game_over_image = pygame.transform.scale(game_over_image, Global_variables.window_size)
+    you_escaped_image = pygame.image.load("images/you_escaped.png")
+    you_escaped_image = pygame.transform.scale(you_escaped_image, Global_variables.window_size)
+>>>>>>> Stashed changes
 
-    def __init__(self, background, maze_size):
+    def __init__(self, background):
         self.background = background
+        self.background_image = pygame.image.load(self.background)
+        self.background_image = pygame.transform.scale(self.background_image, Global_variables.window_size)
+
         pygame.init()
 
+<<<<<<< Updated upstream
         # showMazeScreen variables:
         ## Coloquei elas aqui, pois as imagens precisam ser carregadas apenas uma vez, caso contrario, o jogo fica
         ## muito lento
         self.pxl_x = self.size[0] / (maze_size[0] * 2 + 1)
         self.pxl_y = self.size[1] / (maze_size[1] * 2 + 1)
+=======
+>>>>>>> Stashed changes
 
-        self.wall_image = pygame.image.load("images/wall.png")
-        self.wall_image = pygame.transform.scale(self.wall_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
-        self.exit_image = pygame.image.load("images/exit.png")
-        self.exit_image = pygame.transform.scale(self.exit_image, (int(self.pxl_x + 1), int(self.pxl_y + 1)))
+    def initialWindow(self):
+        pygame.display.set_caption("Crazy Maze")
+        self.window.blit(self.start_button, (Global_variables.window_size[0] / 2 - 180, 450))
+        self.window.blit(self.background_image, (0, 0))
+        self.showImage("images/title_initial.png", (2, 40), (int(1996 / 2), int(667 / 2)))
 
+<<<<<<< Updated upstream
         self.background_image = pygame.image.load(self.background)
         self.background_image = pygame.transform.scale(self.background_image, self.size)
+=======
+    def showImage(self, image_path, position, scale=MISSING):
+        image = pygame.image.load(image_path)
+        if scale is not MISSING:
+            image = pygame.transform.scale(image, scale)
+        self.window.blit(image, position)
+>>>>>>> Stashed changes
 
     def showText(self, text, position, font_size, color):
         title_font = pygame.font.Font(self.font_location, font_size)
@@ -65,6 +109,7 @@ class Window:
         text_rectangle.center = position
         self.window.blit(text_surface, text_rectangle)
 
+<<<<<<< Updated upstream
     def showImage(self, image_path, position, scale=MISSING):
         image = pygame.image.load(image_path)
         if scale is not MISSING:
@@ -78,6 +123,8 @@ class Window:
         self.showImage("images/title_initial.png", (2, 40), (int(1996 / 2), int(667 / 2)))
 
 
+=======
+>>>>>>> Stashed changes
     def showMazeScreen(self, player_list, maze, lives):
         self.window.blit(self.grass_image, (0, 0))
 
@@ -85,10 +132,10 @@ class Window:
         for y in range(maze.height):
             for x in range(maze.width):
                 if maze.matrix[y][x] == 1:
-                    self.window.blit(self.wall_image, (x*self.pxl_x, y*self.pxl_y))
+                    self.window.blit(self.wall_image, (x*Global_variables.cell_size_x, y*Global_variables.cell_size_y))
 
         # Draw exit sign
-        self.window.blit(self.exit_image, ( (maze.width -2) * self.pxl_x, (maze.height - 2)* self.pxl_y))
+        self.window.blit(self.exit_image, ( (maze.width -2) * Global_variables.cell_size_x, (maze.height - 2)* Global_variables.cell_size_y))
 
         # Draw characters
         player_list.draw(self.window)
@@ -108,17 +155,30 @@ class Window:
         if time <= 60:
             time = int(time*100)
             time = time/100.0
+<<<<<<< Updated upstream
             self.showText("Em apenas " + str(time) + " segundos no jogo!", (self.size[0] / 2, 400), 25, (255, 255, 255))
+=======
+            self.showText("Em apenas " + str(time) + " segundos no jogo!", (Global_variables.window_size[0] / 2, 400), 25, (255, 255, 255))
+>>>>>>> Stashed changes
         else:
             time = time/60
             time = int(time*100)
             time = time/100.0
+<<<<<<< Updated upstream
             self.showText("Em apenas " + str(time) + " minutos no jogo!", (self.size[0] / 2, 400), 25, (255, 255, 255))
 
         # self.showText("Tente sair do labirinto", (470, 210), 40, (23, 39, 36))
         # self.showText("sã e salvo!", (470, 250), 40, (23, 39, 36))
         self.window.blit(self.restart_button, (self.size[0] / 4 - 180, 500))
         self.window.blit(self.exit_button, (3*self.size[0] / 4 - 180, 500))
+=======
+            self.showText("Em apenas " + str(time) + " minutos no jogo!", (Global_variables.window_size[0] / 2, 400), 25, (255, 255, 255))
+
+        # self.showText("Tente sair do labirinto", (470, 210), 40, (23, 39, 36))
+        # self.showText("sã e salvo!", (470, 250), 40, (23, 39, 36))
+        self.window.blit(self.restart_button, (Global_variables.window_size[0] / 4 - 180, 500))
+        self.window.blit(self.exit_button, (3*Global_variables.window_size[0] / 4 - 180, 500))
+>>>>>>> Stashed changes
 
 
     def showWinningScreen(self, time):
@@ -129,11 +189,19 @@ class Window:
         if time <= 60:
             time = int(time * 100)
             time = time / 100.0
+<<<<<<< Updated upstream
             self.showText("Em um total de " + str(time) + " segundos no jogo!", (self.size[0] / 2, 180), 25,
+=======
+            self.showText("Em um total de " + str(time) + " segundos no jogo!", (Global_variables.window_size[0] / 2, 180), 25,
+>>>>>>> Stashed changes
                           (23, 39, 36))
         else:
             time = time / 60
             time = int(time * 100)
             time = time / 100.0
+<<<<<<< Updated upstream
             self.showText("Em um total de " + str(time) + " minutos no jogo!", (self.size[0] / 2, 180), 25,
+=======
+            self.showText("Em um total de " + str(time) + " minutos no jogo!", (Global_variables.window_size[0] / 2, 180), 25,
+>>>>>>> Stashed changes
                           (23, 39, 36))
