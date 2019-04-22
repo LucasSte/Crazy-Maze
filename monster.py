@@ -12,7 +12,7 @@ class Move(Enum):
     right = 4
 
 
-class Monster(Window, pygame.sprite.Sprite):
+class Monster(pygame.sprite.Sprite):
 
     path_to_player = list()
     last_monster_node_x = -1
