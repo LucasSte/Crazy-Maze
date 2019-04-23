@@ -121,6 +121,8 @@ class GameController(Window, Maze):
 
             action_local = player.detectMonsterCollision(red_monster, green_monster, ugly_monster, self)
             action_local = player.detectWin(action_local, self)
+            pygame.display.flip()
+
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

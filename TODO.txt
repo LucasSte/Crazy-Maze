@@ -6,6 +6,5 @@ Steuernagel:
         - Colocar correr com Shift
 
 Ocimar:
-    - Adicionar trilha sonora
     - corrigir node vs Cell
     - corrigir y, x para x, y

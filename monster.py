@@ -24,7 +24,7 @@ class Monster(pygame.sprite.Sprite):
     def __init__(self, image_path, node, speed, window):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
-        self.size = (25, 25)
+        self.size = (20, 20)
         self.frame = 0
         image_aux = pygame.image.load(image_path)
         image_aux = pygame.transform.scale(image_aux, self.size)
@@ -86,16 +86,71 @@ class Monster(pygame.sprite.Sprite):
         if self.path_to_player is not None and len(self.path_to_player) > 0:
             next_node = self.path_to_player[-1]
             # monster's current position:
-            up_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y, maze)
-            down_right_corner = AuxFunc.getNode(self.rect.x + self.size[0], self.rect.y + self.size[1], maze)
+            up_left_corner_pos = self.rect.x, self.rect.y, maze
+            up_left_corner_node = AuxFunc.getNode(up_left_corner_pos[0], up_left_corner_pos[1], maze)
+            down_right_corner_pos = self.rect.x + self.size[0], self.rect.y + self.size[1], maze
+            down_right_corner_node = AuxFunc.getNode(down_right_corner_pos[0], down_right_corner_pos[1], maze)
 
-            if down_right_corner[0] - next_node[0] > 0:
+            next_pos = (next_node[1]*maze.pxl_x, next_node[0]*maze.pxl_y)
+            image = pygame.image.load("images/heart.png")
+            image = pygame.transform.scale(image, (24, 24))
+            maze.window.blit(image, next_pos)
+
+            desired_node1 = AuxFunc.getNode(up_left_corner_pos[0], up_left_corner_pos[1]-self.speed, maze)
+            desired_node2 = AuxFunc.getNode(down_right_corner_pos[0], up_left_corner_pos[1]+self.speed, maze)
+            desired_node3 = AuxFunc.getNode(down_right_corner_pos[0]-self.speed, down_right_corner_pos[1], maze)
+            desired_node4 = AuxFunc.getNode(up_left_corner_pos[0]+self.speed, down_right_corner_pos[1], maze)
+
+
+            if down_right_corner_node[0] - next_node[0] > 0 and \
+                    maze.matrix[desired_node1[0], desired_node1[1]] == 0 and \
+                    maze.matrix[desired_node2[0], desired_node2[1]] == 0:
                 self.rect.y -= self.speed
-            elif up_left_corner[0] - next_node[0] < 0:
+                self.last_movement = Move.up
+            elif up_left_corner_node[0] - next_node[0] < 0 and \
+                    maze.matrix[desired_node3[0], desired_node3[1]] == 0 and \
+                    maze.matrix[desired_node4[0], desired_node4[1]] == 0:
                 self.rect.y += self.speed
-            elif down_right_corner[1] - next_node[1] > 0:
-                self.rect.x -= self.speed
-            elif up_left_corner[1] - next_node[1] < 0:
+                self.last_movement = Move.down
+            elif down_right_corner_node[1] - next_node[1] > 0 and \
+                    maze.matrix[desired_node1[0], desired_node1[1]] == 0 and \
+                    maze.matrix[desired_node4[0], desired_node4[1]] == 0:
+                    self.rect.x -= self.speed
+                    self.last_movement = Move.left
+            elif up_left_corner_node[1] - next_node[1] < 0 and \
+                    maze.matrix[desired_node2[0], desired_node2[1]] == 0 and \
+                    maze.matrix[desired_node3[0], desired_node3[1]] == 0:
                 self.rect.x += self.speed
-            else:
+                self.last_movement = Move.right
+
+            # se nao conseguiu mover-se para onde quer, repete o ultimo movimento:
+            if self.last_movement == Move.right:
+                self.rect.x += self.speed
+            elif self.last_movement == Move.down:
+                self.rect.y += self.speed
+            elif self.last_movement == Move.left:
+                self.rect.x -= self.speed
+            elif self.last_movement == Move.up:
+                self.rect.y -= self.speed
+
+            # se nao conseguiu mover-se para onde quer, vai para onde pode:
+            # elif maze.matrix[desired_node2[0], desired_node2[1]] == 0 and \
+            #         maze.matrix[desired_node3[0], desired_node3[1]] == 0:
+            #     self.rect.x += self.speed
+            #     self.last_movement = Move.right
+            # elif maze.matrix[desired_node3[0], desired_node3[1]] == 0 and \
+            #         maze.matrix[desired_node4[0], desired_node4[1]] == 0:
+            #     self.rect.y += self.speed
+            #     self.last_movement = Move.down
+            # elif maze.matrix[desired_node1[0], desired_node1[1]] == 0 and \
+            #         maze.matrix[desired_node4[0], desired_node4[1]] == 0:
+            #         self.rect.x -= self.speed
+            #         self.last_movement = Move.left
+            # elif maze.matrix[desired_node1[0], desired_node1[1]] == 0 and \
+            #         maze.matrix[desired_node2[0], desired_node2[1]] == 0:
+            #     self.rect.y -= self.speed
+            #     self.last_movement = Move.up
+
+
+            if self.getMonsterNode(maze) == next_node:
                 self.path_to_player.pop()
