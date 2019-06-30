@@ -3,6 +3,7 @@ from numpy.random import randint as rand
 from open_window import Window
 from heapq import *
 
+
 class Algorithm:
 
     @staticmethod
@@ -102,19 +103,7 @@ class Algorithm:
         return None
 
 
-class AuxFunc(Window):
-
-    @staticmethod
-    def getNode(position_x, position_y, maze):
-
-        matrix_shape = maze.matrix.shape
-
-        character_matrix_x = int(position_x*matrix_shape[1]/Window.size[0])
-        character_matrix_y = int(position_y*matrix_shape[0]/Window.size[1])
-
-        character_node = (character_matrix_y, character_matrix_x)
-
-        return character_node
+class AuxFunc():
 
     @staticmethod
     def heuristic(a, b):

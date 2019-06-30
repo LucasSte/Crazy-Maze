@@ -1,8 +1,8 @@
 import pygame
 from open_window import Window
 from algorithm import Algorithm
-from algorithm import AuxFunc
 from enum import Enum
+from character import Character
 
 
 class Move(Enum):
@@ -12,7 +12,7 @@ class Move(Enum):
     right = 4
 
 
-class Monster(pygame.sprite.Sprite):
+class MonsterCharacter(Character):
 
     path_to_player = list()
     last_monster_node_x = -1
@@ -22,10 +22,8 @@ class Monster(pygame.sprite.Sprite):
     last_movement = 0
 
     def __init__(self, image_path, node, speed, window):
-        pygame.sprite.Sprite.__init__(self)
-        self.images = []
+        Character.__init__(self)
         self.size = (25, 25)
-        self.frame = 0
         image_aux = pygame.image.load(image_path)
         image_aux = pygame.transform.scale(image_aux, self.size)
         self.image = image_aux
@@ -41,23 +39,12 @@ class Monster(pygame.sprite.Sprite):
         self.rect.x = self.start_position[0]
         self.rect.y = self.start_position[1]
 
-    def getMonsterNode(self, maze): # of your center
-
-        matrix_shape = maze.matrix.shape
-
-        monster_matrix_x = int((self.rect.x+self.size[0]/2)*matrix_shape[1]/Window.size[0])
-        monster_matrix_y = int((self.rect.y+self.size[1]/2)*matrix_shape[0]/Window.size[1])
-
-        monster_node = (monster_matrix_y, monster_matrix_x)
-
-        return monster_node
-
     def findNewPath(self, player, game_controller):
 
         # aStar eh muito pesado e estava causando lag no jogo, adicionei um delay para sua execucao:
         if self.aStar_counter == 0 or self.aStar_counter > self.aStar_delay:
-            player_node = player.getCharacterNode(game_controller)
-            monster_node = self.getMonsterNode(game_controller)
+            player_node = player.getCharacterRectNode(game_controller)
+            monster_node = self.getCharacterRectNode(game_controller)
             if game_controller.matrix[player_node[0]][player_node[1]] == 0:
                 if self.last_monster_node_x != monster_node[0] or self.last_monster_node_y != monster_node[1]:
                     self.path_to_player = Algorithm.aStar(game_controller.matrix, monster_node, player_node)
@@ -68,15 +55,15 @@ class Monster(pygame.sprite.Sprite):
 
 
     def inOnlyOneNode(self, maze):
-        up_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y, maze)
-        up_right_corner = AuxFunc.getNode(self.rect.x+self.size[0], self.rect.y, maze)
+        up_left_corner = self.getNode(self.rect.x, self.rect.y, maze)
+        up_right_corner = self.getNode(self.rect.x+self.size[0], self.rect.y, maze)
 
         if up_left_corner[0] != up_right_corner[0] or up_left_corner[1] != up_right_corner[1]:
             return False
-        down_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y + self.size[1], maze)
+        down_left_corner = self.getNode(self.rect.x, self.rect.y + self.size[1], maze)
         if up_left_corner[0] != down_left_corner[0] or up_left_corner[1] != down_left_corner[1]:
             return False
-        down_right_corner = AuxFunc.getNode(self.rect.x + self.size[0], self.rect.y+self.size[1], maze)
+        down_right_corner = self.getNode(self.rect.x + self.size[0], self.rect.y+self.size[1], maze)
         if up_left_corner[0] != down_right_corner[0] or up_left_corner[1] != down_right_corner[1]:
             return False
         else:
@@ -86,8 +73,8 @@ class Monster(pygame.sprite.Sprite):
         if self.path_to_player is not None and len(self.path_to_player) > 0:
             next_node = self.path_to_player[-1]
             # monster's current position:
-            up_left_corner = AuxFunc.getNode(self.rect.x, self.rect.y, maze)
-            down_right_corner = AuxFunc.getNode(self.rect.x + self.size[0], self.rect.y + self.size[1], maze)
+            up_left_corner = self.getNode(self.rect.x, self.rect.y, maze)
+            down_right_corner = self.getNode(self.rect.x + self.size[0], self.rect.y + self.size[1], maze)
 
             if down_right_corner[0] - next_node[0] > 0:
                 self.rect.y -= self.speed

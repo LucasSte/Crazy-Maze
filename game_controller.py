@@ -1,6 +1,6 @@
-from character import *
+from user_charachter import *
 from maze import *
-from monster import *
+from monster_character import *
 from parallel_threads import ParallelThreads
 import time
 import pygame
@@ -54,12 +54,12 @@ class GameController(Window, Maze):
 
     def playGame(self, maze_shape):
         Maze.__init__(self, maze_shape[0], maze_shape[1])
-        player = Character(3, self)
+        player = UserCharacter(3, self)
         player_list = pygame.sprite.Group()
 
-        red_monster = Monster('images/monster1.png', (1, self.height - 2), 2, self)
-        green_monster = Monster('images/monster2.png', (self.width - 2, 1), 1, self)
-        ugly_monster = Monster('images/monster3.png', (self.width - 2, 1), 2, self)
+        red_monster = MonsterCharacter('images/monster1.png', (1, self.height - 2), 2, self)
+        green_monster = MonsterCharacter('images/monster2.png', (self.width - 2, 1), 1, self)
+        ugly_monster = MonsterCharacter('images/monster3.png', (self.width - 2, 1), 2, self)
         player_list.add(player)
         player_list.add(red_monster)
         player_list.add(green_monster)
@@ -76,7 +76,7 @@ class GameController(Window, Maze):
             if not pygame.mixer.music.get_busy():
                 pygame.mixer.music.play()
             # update maze:
-            self.updateMaze(player.getCharacterNode(self))
+            self.updateMaze(player.getCharacterRectNode(self))
             self.showMazeScreen(player_list, self, player.lives)
             ParallelThreads.findMonstersNewPosition(red_monster, green_monster, ugly_monster, player,
                                                     self, player_list)

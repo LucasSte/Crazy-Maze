@@ -1,190 +1,31 @@
 import pygame
-from open_window import Action
-from algorithm import AuxFunc
-import numpy as np
-
 
 class Character(pygame.sprite.Sprite):
 
-    def __init__(self, lives, window):
+    def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         self.frame = 0
-        self.size = (int(window.pxl_x-1), int(window.pxl_y))
+        self.rect = None
 
-        for i in range(1, 4):
-            image_aux = pygame.image.load('images/Walk(' + str(i) + ').png')
-            image_aux = pygame.transform.scale(image_aux, self.size)
-            self.images.append(image_aux)
-            self.image = self.images[0]
-            self.rect = self.image.get_rect()
-
-        self.rect.x = int(window.pxl_x) + 1
-        self.rect.y = int(window.pxl_y) + 1
-        self.lives = lives
-
-    def getCharacterNode(self, game_controller):  # of your center
+    def getCharacterRectNode(self, game_controller):
 
         matrix_shape = game_controller.matrix.shape
 
-        player_matrix_x = int((self.rect.x+game_controller.pxl_x/2)*matrix_shape[1]/game_controller.size[0])
-        player_matrix_y = int((self.rect.y+game_controller.pxl_y/2)*matrix_shape[0]/game_controller.size[1])
+        matrix_x = int((self.rect.x+game_controller.pxl_x/2)*matrix_shape[1]/game_controller.size[0])
+        matrix_y = int((self.rect.y+game_controller.pxl_y/2)*matrix_shape[0]/game_controller.size[1])
 
-        player_node = (player_matrix_y, player_matrix_x)
+        node = (matrix_y, matrix_x)
 
-        return player_node
+        return node
 
+    def getNode(self, position_x, position_y, game_controller):
 
-    def control(self, y, x, maze):
+        matrix_shape = game_controller.matrix.shape
 
-        # character's current position:
-        max_pos_x = self.rect.x + self.size[0] - 7  # o -7 eh para dar uma folga no seu cabelo da frente
-        min_pos_x = self.rect.x + 7  # o +7 eh para dar uma folga nas suas costas
-        max_pos_y = self.rect.y + self.size[1]
-        min_pos_y = self.rect.y + 15  ## o +15 eh para dar uma folga no seu cabelo
+        character_matrix_x = int(position_x*matrix_shape[1]/game_controller.size[0])
+        character_matrix_y = int(position_y*matrix_shape[0]/game_controller.size[1])
 
-        can_move = False
-        blocked = True
+        character_node = (character_matrix_y, character_matrix_x)
 
-        if x > 0:
-            desired_pos1 = (max_pos_x + 4 * x, min_pos_y)
-            desired_pos2 = (max_pos_x + 4 * x, max_pos_y)
-            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                can_move = True
-                blocked = False
-
-        elif x < 0:
-            desired_pos1 = (min_pos_x + 4 * x, min_pos_y)
-            desired_pos2 = (min_pos_x + 4 * x, max_pos_y)
-            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                can_move = True
-                blocked = False
-
-        elif y > 0:
-            desired_pos1 = (min_pos_x, max_pos_y + 4 * y)
-            desired_pos2 = (max_pos_x, max_pos_y + 4 * y)
-            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                can_move = True
-                blocked = False
-
-        elif y < 0:
-            desired_pos1 = (min_pos_x, min_pos_y + 4 * y)
-            desired_pos2 = (max_pos_x, min_pos_y + 4 * y)
-            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                can_move = True
-                blocked = False
-
-        if blocked:
-            desired_pos1 = (max_pos_x + 4 * x, min_pos_y)
-            desired_pos2 = (max_pos_x + 4 * x, max_pos_y)
-            desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-            desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-            if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                    maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                blocked = False
-            else:
-                desired_pos1 = (min_pos_x + 4 * x, min_pos_y)
-                desired_pos2 = (min_pos_x + 4 * x, max_pos_y)
-                desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-                desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-                if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                        maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                    blocked = False
-
-                else:
-                    desired_pos1 = (min_pos_x, max_pos_y + 4 * y)
-                    desired_pos2 = (max_pos_x, max_pos_y + 4 * y)
-                    desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-                    desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-                    if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                            maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                        blocked = False
-
-                    else:
-                        desired_pos1 = (min_pos_x, min_pos_y + 4 * y)
-                        desired_pos2 = (max_pos_x, min_pos_y + 4 * y)
-                        desired_node1 = AuxFunc.getNode(desired_pos1[0], desired_pos1[1], maze)
-                        desired_node2 = AuxFunc.getNode(desired_pos2[0], desired_pos2[1], maze)
-                        if maze.matrix[desired_node1[0]][desired_node1[1]] == 0 and \
-                                maze.matrix[desired_node2[0]][desired_node2[1]] == 0:  # if is grass (path)
-                            blocked = False
-
-        if can_move or blocked:
-            self.rect.x += 4 * x
-            self.rect.y += 4 * y
-            if x > 0 or y > 0:
-                self.frame += 1
-                self.frame = self.frame % 3
-                self.image = self.images[self.frame]
-            elif x < 0 or y < 0:
-                self.frame -= 1
-                if self.frame < 0:
-                    self.frame = 2
-                self.image = self.images[self.frame]
-
-
-
-    def updateLives(self, number):
-        self.lives += number
-
-        if self.lives == 0:
-            return Action.player_dead
-        else:
-            return Action.stand_by
-
-    def detectMonsterCollision(self, monster_1, monster_2, monster_3, game_controller):
-
-        monster_1_distance = np.sqrt((monster_1.rect.x - self.rect.x)**2 + (monster_1.rect.y - self.rect.y)**2)
-        monster_2_distance = np.sqrt((monster_2.rect.x - self.rect.x)**2 + (monster_2.rect.y - self.rect.y)**2)
-        monster_3_distance = np.sqrt((monster_3.rect.x - self.rect.x)**2 + (monster_3.rect.y - self.rect.y)**2)
-
-        if monster_1_distance < 32:
-            self.rect.x += 1
-            self.rect.y += 1
-
-            monster_1.resetPosition()
-            monster_1.findNewPath(self, game_controller)
-
-            return self.updateLives(-1)
-
-        elif monster_2_distance < 32:
-            self.rect.x += 1
-            self.rect.y += 1
-
-            monster_2.resetPosition()
-            monster_2.findNewPath(self, game_controller)
-
-            return self.updateLives(-1)
-
-        elif monster_3_distance < 32:
-            self.rect.x += 1
-            self.rect.y += 1
-
-            monster_3.resetPosition()
-            monster_3.findNewPath(self, game_controller)
-
-            return self.updateLives(-1)
-
-        else:
-            return Action.stand_by
-
-    def detectWin(self, action_local, game_controller):
-        postition = self.getCharacterNode(game_controller)
-
-        # winning has preference
-        if postition[1] == game_controller.width - 2 and postition[0] == game_controller.height - 2:
-            return Action.player_win
-
-        return action_local
+        return character_node
