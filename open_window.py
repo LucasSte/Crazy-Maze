@@ -88,7 +88,7 @@ class Window:
                     self.window.blit(self.wall_image, (x*self.pxl_x, y*self.pxl_y))
 
         # Draw exit sign
-        self.window.blit(self.exit_image, ( (maze.width -2) * self.pxl_x, (maze.height - 2)* self.pxl_y))
+        self.window.blit(self.exit_image, ((maze.width -2) * self.pxl_x, (maze.height - 2)* self.pxl_y))
 
         # Draw characters
         player_list.draw(self.window)

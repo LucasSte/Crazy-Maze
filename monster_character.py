@@ -21,15 +21,15 @@ class MonsterCharacter(Character):
     aStar_counter = 0
     last_movement = 0
 
-    def __init__(self, image_path, node, speed, window):
-        Character.__init__(self)
+    def __init__(self, image_path, node, speed, mediator):
+        Character.__init__(self, mediator)
         self.size = (25, 25)
         image_aux = pygame.image.load(image_path)
         image_aux = pygame.transform.scale(image_aux, self.size)
         self.image = image_aux
         self.rect = self.image.get_rect()
-        start_position_x = node[0]*window.pxl_x + 1
-        start_position_y = node[1]*window.pxl_y + 1
+        start_position_x = node[0]*mediator.game_screen.pxl_x + 1
+        start_position_y = node[1]*mediator.game_screen.pxl_y + 1
         self.start_position = (start_position_x, start_position_y)
         self.rect.x = start_position_x
         self.rect.y = start_position_y
@@ -39,42 +39,42 @@ class MonsterCharacter(Character):
         self.rect.x = self.start_position[0]
         self.rect.y = self.start_position[1]
 
-    def findNewPath(self, player, game_controller):
+    def findNewPath(self, player):
 
         # aStar eh muito pesado e estava causando lag no jogo, adicionei um delay para sua execucao:
         if self.aStar_counter == 0 or self.aStar_counter > self.aStar_delay:
-            player_node = player.getCharacterRectNode(game_controller)
-            monster_node = self.getCharacterRectNode(game_controller)
-            if game_controller.matrix[player_node[0]][player_node[1]] == 0:
+            player_node = player.getCharacterRectNode()
+            monster_node = self.getCharacterRectNode()
+            if self.mediator.maze.matrix[player_node[0]][player_node[1]] == 0:
                 if self.last_monster_node_x != monster_node[0] or self.last_monster_node_y != monster_node[1]:
-                    self.path_to_player = Algorithm.aStar(game_controller.matrix, monster_node, player_node)
+                    self.path_to_player = Algorithm.aStar(self.mediator.maze.matrix, monster_node, player_node)
 
             self.aStar_counter = 0
 
         self.aStar_counter = self.aStar_counter + 1
 
 
-    def inOnlyOneNode(self, maze):
-        up_left_corner = self.getNode(self.rect.x, self.rect.y, maze)
-        up_right_corner = self.getNode(self.rect.x+self.size[0], self.rect.y, maze)
+    def inOnlyOneNode(self):
+        up_left_corner = self.getNode(self.rect.x, self.rect.y)
+        up_right_corner = self.getNode(self.rect.x+self.size[0], self.rect.y)
 
         if up_left_corner[0] != up_right_corner[0] or up_left_corner[1] != up_right_corner[1]:
             return False
-        down_left_corner = self.getNode(self.rect.x, self.rect.y + self.size[1], maze)
+        down_left_corner = self.getNode(self.rect.x, self.rect.y + self.size[1])
         if up_left_corner[0] != down_left_corner[0] or up_left_corner[1] != down_left_corner[1]:
             return False
-        down_right_corner = self.getNode(self.rect.x + self.size[0], self.rect.y+self.size[1], maze)
+        down_right_corner = self.getNode(self.rect.x + self.size[0], self.rect.y+self.size[1])
         if up_left_corner[0] != down_right_corner[0] or up_left_corner[1] != down_right_corner[1]:
             return False
         else:
             return True
 
-    def updatePosition(self, maze):
+    def updatePosition(self):
         if self.path_to_player is not None and len(self.path_to_player) > 0:
             next_node = self.path_to_player[-1]
             # monster's current position:
-            up_left_corner = self.getNode(self.rect.x, self.rect.y, maze)
-            down_right_corner = self.getNode(self.rect.x + self.size[0], self.rect.y + self.size[1], maze)
+            up_left_corner = self.getNode(self.rect.x, self.rect.y)
+            down_right_corner = self.getNode(self.rect.x + self.size[0], self.rect.y + self.size[1])
 
             if down_right_corner[0] - next_node[0] > 0:
                 self.rect.y -= self.speed
