@@ -1,5 +1,4 @@
 from user_charachter import *
-from maze import *
 from monster_character import *
 from parallel_threads import ParallelThreads
 from mediator import Mediator

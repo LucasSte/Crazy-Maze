@@ -1,13 +1,9 @@
-import numpy as np
 import copy
 from algorithm import Algorithm
 
 
 # Usa o algoritmo de Prim, logo o labirinto é um conjunto de celulas conexas
 # (o jogador pode chegar em qualquer celula partindo de qualquer celula)
-
-# IMPORTANTE: Para que o labirinto seja dinamico, o jogador nao deve
-#             ocupar uma poscao que antes era de uma parede, apenas posicao de celulas
 
 # Ao longo do codigo tem-se usado a seguinte notacao:
 #   - cell = noh do grafo
@@ -16,6 +12,11 @@ from algorithm import Algorithm
 
 
 class Maze:
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(Maze, cls).__new__(cls)
+        return cls.instance
 
     def __init__(self, num_cells_x, num_cells_y, start_cell=(0, 0)):
         self.num_cells_x = num_cells_x
@@ -38,8 +39,7 @@ class Maze:
         self.mazes_matrices = [self.matrix]
 
         start_node = player_node
-        start_cell = (int((start_node[1]-1)/2), int((start_node[0]-1)/2))
-        new_maze = Maze(self.num_cells_x, self.num_cells_y, start_cell)
+        new_matrix = Algorithm.prim(self)
 
         x = start_node[1]
         y = start_node[0]
@@ -50,10 +50,10 @@ class Maze:
             x_min, y_min = max(0, x - j), max(0, y - j)
             x_max, y_max = min(self.width, x + j), min(self.height, y + j)
 
-            M[y_min: y_max, x_min] = copy.deepcopy(new_maze.matrix[y_min: y_max, x_min])
-            M[y_min: y_max, x_max - 1] = copy.deepcopy(new_maze.matrix[y_min: y_max, x_max - 1])
-            M[y_min, x_min:x_max] = copy.deepcopy(new_maze.matrix[y_min, x_min:x_max])
-            M[y_max - 1, x_min:x_max] = copy.deepcopy(new_maze.matrix[y_max - 1, x_min:x_max])
+            M[y_min: y_max, x_min] = copy.deepcopy(new_matrix[y_min: y_max, x_min])
+            M[y_min: y_max, x_max - 1] = copy.deepcopy(new_matrix[y_min: y_max, x_max - 1])
+            M[y_min, x_min:x_max] = copy.deepcopy(new_matrix[y_min, x_min:x_max])
+            M[y_max - 1, x_min:x_max] = copy.deepcopy(new_matrix[y_max - 1, x_min:x_max])
 
             self.mazes_matrices.append(copy.deepcopy(M))
             j += 1

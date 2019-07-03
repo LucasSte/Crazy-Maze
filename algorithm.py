@@ -1,6 +1,5 @@
 import numpy as np
 from numpy.random import randint as rand
-from open_window import Window
 from heapq import *
 
 
